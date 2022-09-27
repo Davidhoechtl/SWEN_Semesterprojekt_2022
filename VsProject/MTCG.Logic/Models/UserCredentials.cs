@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonsterTradingCardEntwurf
+namespace MTCG.Models
 {
     public class UserCredentials
     {

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MTCG.Models;
 
-namespace MonsterTradingCardEntwurf
+namespace MTCG.Infrastructure
 {
     public class PackageFactory
     {
@@ -29,7 +26,7 @@ namespace MonsterTradingCardEntwurf
         /// <returns></returns>
         public Package CreatePackage(int cardCount)
         {
-            if(avialableCards.Length < cardCount)
+            if (avialableCards.Length < cardCount)
             {
                 throw new Exception($"Not enough available Cards to generate Package (CardCount: {cardCount})");
             }

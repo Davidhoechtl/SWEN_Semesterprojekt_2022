@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MTCG.Logic\MTCG.Logic.csproj" />
+  </ItemGroup>
+
 </Project>
