@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MTCG.Models
 {
-    public abstract class SpellCard : Card, IHasSpell
+    public class SpellCard : Card, IHasSpell
     {
 
         public void Cast()

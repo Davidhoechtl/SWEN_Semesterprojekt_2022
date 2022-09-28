@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MTCG.Models
 {
-    public abstract class MonsterCard : Card
+    public class MonsterCard : Card
     {
     }
 }
