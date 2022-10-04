@@ -8,7 +8,8 @@ namespace MTCG.Models
     public class User
     {
         public UserCredentials Credentials { get; set; }
-        public List<Card> Stack { get; set; }
+        public List<Card> Stack { get; set; } = new();
+        public Deck Deck { get; set; }
         public int Coins { get; set; }
 
         public Deck SelectDeck()

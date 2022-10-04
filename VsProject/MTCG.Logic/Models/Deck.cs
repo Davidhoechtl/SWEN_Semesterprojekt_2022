@@ -7,6 +7,6 @@ namespace MTCG.Models
 {
     public class Deck
     {
-        public Stack<Card> Cards { get; set; }
+        public Stack<Card> Cards { get; set; } = new();
     }
 }
