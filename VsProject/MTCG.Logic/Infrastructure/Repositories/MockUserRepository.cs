@@ -2,7 +2,7 @@
 
 namespace MTCG.Logic.Infrastructure.Repositories
 {
-    internal class MockUserRepository : IUserRepository
+    public class MockUserRepository : IUserRepository
     {
         private static readonly IEnumerable<User> registeredUsers = new List<User>()
         {
@@ -24,6 +24,16 @@ namespace MTCG.Logic.Infrastructure.Repositories
         {
             return registeredUsers
                 .FirstOrDefault(user => user.Credentials.UserName.Equals(username, StringComparison.Ordinal));
+        }
+
+        public bool SaveUser(string username, string password)
+        {
+            return true;
+        }
+
+        public bool UpdateUser(User user)
+        {
+            return true;
         }
     }
 }
