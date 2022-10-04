@@ -7,6 +7,6 @@ namespace MTCG.Models
 {
     public class Package
     {
-        public List<Card> Cards { get; init; }
+        public List<Card> Cards { get; init; } = new();
     }
 }

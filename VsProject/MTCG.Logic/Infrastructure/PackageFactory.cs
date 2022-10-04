@@ -1,22 +1,19 @@
-﻿using MTCG.Models;
+﻿using MTCG.Logic.Infrastructure.Repositories;
+using MTCG.Models;
 
 namespace MTCG.Infrastructure
 {
     public class PackageFactory
     {
+        private readonly ICardRepository cardRepository;
+        private readonly Random random;
         private Card[] avialableCards;
-
-        /// <summary>
-        /// Verfügbare Karten werden geladen
-        /// </summary>
-        public void Init()
+       
+        public PackageFactory(ICardRepository cardRepository, Random random)
         {
-            avialableCards = new Card[]
-            {
-
-            };
-
-            // Später sollten Karten mittels Repository aus der Datenbank ausgelesen werden
+            this.cardRepository = cardRepository;
+            this.random = random;
+            avialableCards = cardRepository.GetAllAvailableCards().ToArray();
         }
 
         /// <summary>
@@ -31,7 +28,14 @@ namespace MTCG.Infrastructure
                 throw new Exception($"Not enough available Cards to generate Package (CardCount: {cardCount})");
             }
 
-            return null;
+            Package package = new();
+            for (int i = 0; i < cardCount; i++)
+            {
+                Card randomCard = avialableCards[random.Next(0, avialableCards.GetUpperBound(0))];
+                package.Cards.Add(randomCard);
+            }
+
+            return package;
         }
     }
 }
