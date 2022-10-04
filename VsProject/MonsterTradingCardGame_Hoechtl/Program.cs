@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MonsterTradingCardGame_Hoechtl.Handler;
 using MTCG.Models;
 
 namespace MonsterTradingCardGame_Hoechtl
@@ -17,6 +18,8 @@ namespace MonsterTradingCardGame_Hoechtl
 
             // build des Containers
             container = bootstrapper.Build();
+
+            UserModule test = container.Resolve<UserModule>();
 
             User testUser = new User()
             {
