@@ -14,5 +14,7 @@ namespace MTCG.Models
         /// ElemnentTyp könnte in die ElementEffect klasse
         /// </summary>
         public ElementTyp ElementTyp { get; set; }
+
+        public abstract Card BattleAgainst(Card other);
     }
 }
