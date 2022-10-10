@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace MTCG.Logic.Models.Monster
 {
-    internal class Ork : MonsterCard
+    public class Ork : MonsterCard
     {
         public override Card BattleAgainst(Card other)
         {
+            if(other is Wizzard)
+            {
+                // wizzard control orks
+                return other;
+            }
+
             return base.BattleAgainst(other);
         }
     }

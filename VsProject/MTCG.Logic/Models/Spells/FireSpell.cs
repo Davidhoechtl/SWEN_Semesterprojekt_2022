@@ -1,4 +1,5 @@
-﻿using MTCG.Models;
+﻿using MTCG.Logic.Models.Monster;
+using MTCG.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,17 @@ using System.Threading.Tasks;
 
 namespace MTCG.Logic.Models.Spells
 {
-    internal class FireSpell : SpellCard
+    public class FireSpell : SpellCard
     {
+        public override Card BattleAgainst(Card other)
+        {
+            if (other is Kraken)
+            {
+                //Kraken ist immune gegen spells
+                return other;
+            }
+
+            return base.BattleAgainst(other);
+        }
     }
 }

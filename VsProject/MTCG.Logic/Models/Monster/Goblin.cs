@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace MTCG.Logic.Models.Monster
 {
-    internal class Goblin : MonsterCard
+    public class Goblin : MonsterCard
     {
         public override Card BattleAgainst(Card other)
         {
+            if(other is Dragon)
+            {
+                // Goblins cant attack dragons
+                return other;
+            }
+
             return base.BattleAgainst(other);
         }
     }

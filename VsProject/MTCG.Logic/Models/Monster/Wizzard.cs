@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.Logic.Models.Monster
 {
-    internal class Wizzard : MonsterCard
+    public class Wizzard : MonsterCard
     {
         public override Card BattleAgainst(Card other)
         {

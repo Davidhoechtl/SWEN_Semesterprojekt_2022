@@ -15,7 +15,7 @@ namespace MTCG.Tests
 
             //Assert
             Assert.NotNull(found);
-            Assert.Equals(found.Credentials.UserName, username);
+            Assert.That(found.Credentials.UserName.Equals(username,StringComparison.Ordinal));
         }
     }
 }

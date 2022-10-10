@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.Logic.Models.Monster
 {
-    internal class Kraken : MonsterCard
+    public class Kraken : MonsterCard
     {
         public override Card BattleAgainst(Card other)
         {

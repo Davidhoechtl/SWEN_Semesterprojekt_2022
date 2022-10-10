@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.Logic.Models.Monster
 {
-    internal sealed class Dragon : MonsterCard
+    public sealed class Dragon : MonsterCard
     {
         public override Card BattleAgainst(Card other)
         {
@@ -16,6 +16,11 @@ namespace MTCG.Logic.Models.Monster
                 // goblins sind können Dragons nicht angreifen
                 // deshalb gewinnt der Dragon
                 return this;
+            }
+            else if (other is FireElve)
+            {
+                // FireElve können den angriffen von Dragons ausweichen
+                return other;
             }
 
             return base.BattleAgainst(other);
