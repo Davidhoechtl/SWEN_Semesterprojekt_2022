@@ -2,7 +2,7 @@
 
 namespace MTCG.Logic.Infrastructure.Repositories
 {
-    internal class MockCardRepository : ICardRepository
+    public class MockCardRepository : ICardRepository
     {
         private static readonly IEnumerable<Card> availableCards = new List<Card>()
         {

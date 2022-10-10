@@ -2,7 +2,7 @@
 
 namespace MTCG.Logic.Infrastructure.Repositories
 {
-    internal class MockUserRepository : IUserRepository
+    public class MockUserRepository : IUserRepository
     {
         private static readonly IEnumerable<User> registeredUsers = new List<User>()
         {
