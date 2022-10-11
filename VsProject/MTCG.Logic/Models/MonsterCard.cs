@@ -9,21 +9,28 @@ namespace MTCG.Models
     {
         public override Card BattleAgainst(Card other)
         {
-            // Elementyp is not taken into account
-            if (this.Damage > other.Damage)
+            if(other is SpellCard)
             {
-                // monster 1 slayed monster 2
-                return this;
-            }
-            else if (this.Damage < other.Damage)
-            {
-                // monster 2 slayed monster 1
-                return other;
+                return base.BattleAgainst(other);
             }
             else
             {
-                // Draw
-                return null;
+                // Elementyp is not taken into account
+                if (this.Damage > other.Damage)
+                {
+                    // monster 1 slayed monster 2
+                    return this;
+                }
+                else if (this.Damage < other.Damage)
+                {
+                    // monster 2 slayed monster 1
+                    return other;
+                }
+                else
+                {
+                    // Draw
+                    return null;
+                }
             }
         }
     }
