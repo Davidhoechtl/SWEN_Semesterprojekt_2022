@@ -3,10 +3,12 @@ namespace MTCG.Tests
 {
     internal class BattleValidationTests
     {
+        private readonly Random rnd = new Random();
+
         [Test]
         public void Test_Invalid_OneUserHasNoDeck()
         {
-            BattleLauncher battleLauncher = new BattleLauncher();
+            BattleLauncher battleLauncher = new BattleLauncher(rnd);
             ICardRepository cardRepository = new MockCardRepository();
             IEnumerable<Card> cards = cardRepository.GetAllAvailableCards();
 
@@ -21,7 +23,7 @@ namespace MTCG.Tests
         [Test]
         public void Test_Invalid_UserHaveDifferentAmountsOfCards()
         {
-            BattleLauncher battleLauncher = new BattleLauncher();
+            BattleLauncher battleLauncher = new BattleLauncher(rnd);
             ICardRepository cardRepository = new MockCardRepository();
             IEnumerable<Card> cards = cardRepository.GetAllAvailableCards();
 
@@ -36,7 +38,7 @@ namespace MTCG.Tests
         [Test]
         public void Test_Invalid_OneUserHasNoCards()
         {
-            BattleLauncher battleLauncher = new BattleLauncher();
+            BattleLauncher battleLauncher = new BattleLauncher(rnd);
             ICardRepository cardRepository = new MockCardRepository();
             IEnumerable<Card> cards = cardRepository.GetAllAvailableCards();
 
@@ -51,7 +53,7 @@ namespace MTCG.Tests
         [Test]
         public void Test_Valid()
         {
-            BattleLauncher battleLauncher = new BattleLauncher();
+            BattleLauncher battleLauncher = new BattleLauncher(rnd);
             ICardRepository cardRepository = new MockCardRepository();
             IEnumerable<Card> cards = cardRepository.GetAllAvailableCards();
 

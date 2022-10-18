@@ -5,6 +5,13 @@ namespace MTCG.Logic.Infrastructure
 {
     public class BattleLauncher
     {
+        private readonly Random rnd;
+
+        public BattleLauncher(Random rnd)
+        {
+            this.rnd = rnd;
+        }
+
         public BattleResult Launch(User player1, User player2)
         {
             bool validBattleConfiguration = ValidateBattle(player1, player2);
@@ -16,6 +23,8 @@ namespace MTCG.Logic.Infrastructure
             int roundCount = 1;
             while (player1.Deck.Cards.Count > 0 && player2.Deck.Cards.Count > 0 && roundCount < 100)
             {
+                Shuffle(player1.Deck.Cards);
+                Shuffle(player2.Deck.Cards);
                 Card player1Card = player1.Deck.Cards.Pop();
                 Card player2Card = player2.Deck.Cards.Pop();
 
@@ -67,6 +76,14 @@ namespace MTCG.Logic.Infrastructure
             }
 
             return false;
+        }
+
+        private void Shuffle(Stack<Card> stack)
+        {
+            var values = stack.ToArray();
+            stack.Clear();
+            foreach (var value in values.OrderBy(x => rnd.Next()))
+                stack.Push(value);
         }
     }
 }
