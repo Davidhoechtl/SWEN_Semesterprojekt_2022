@@ -1,22 +1,58 @@
 ﻿using MTCG.Logic.Models.Trading;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MTCG.Models;
 
 namespace MTCG.Logic.Infrastructure.Repositories
 {
     internal class MockTradeOfferRepository : ITradeOfferRepository
     {
+        private static readonly IEnumerable<TradingOffer> offers = new List<TradingOffer>()
+        {
+            new TradingOffer(
+                "Offer1",
+                "TestUser", 
+                new MonsterCard()
+                {
+                    Name = "Wolve",
+                    Damage = 10,
+                    ElementTyp = ElementTyp.Normal
+                },
+                new List<TradeRequirement>()
+                {
+                    new DamageRequirement(15),
+                    new ElementTypRequirement(ElementTyp.Fire),
+                    new CardTypRequirement<MonsterCard>()
+                },
+                true
+            ),
+            new TradingOffer(
+                "Offer2",
+                "TestUser2",
+                new MonsterCard()
+                {
+                    Name = "Blob",
+                    Damage = 10,
+                    ElementTyp = ElementTyp.Normal
+                },
+                new List<TradeRequirement>()
+                {
+                    new DamageRequirement(15),
+                    new ElementTypRequirement(ElementTyp.Fire),
+                    new CardTypRequirement<SpellCard>()
+                },
+                false
+            ) { BuyerUserName = "TestUser" },
+        };
+
         public IEnumerable<TradingOffer> GetAllTradeOffers()
         {
-            throw new NotImplementedException();
+            return offers;
         }
 
         public TradingOffer GetTradeOfferBySeller(string sellerUserName)
         {
-            throw new NotImplementedException();
+            return offers
+                .FirstOrDefault(o => o.SellerUserName.Equals(sellerUserName, StringComparison.Ordinal)
+            );
         }
 
         public void SaveTradeOffer(TradingOffer tradeOffer)
