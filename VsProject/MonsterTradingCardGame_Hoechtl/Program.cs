@@ -18,12 +18,8 @@ namespace MonsterTradingCardGame_Hoechtl
             // build des Containers
             container = bootstrapper.Build();
 
-            User testUser = new User()
-            {
-                Credentials = new UserCredentials("Test", "Test")
-            };
-
-            Console.Write(testUser.Credentials.UserName);
+            Server accessPoint = new Server();
+            accessPoint.Open();
         }
     }
 }
