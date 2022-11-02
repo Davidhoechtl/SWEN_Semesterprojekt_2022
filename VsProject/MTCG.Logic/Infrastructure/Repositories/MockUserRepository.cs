@@ -25,5 +25,15 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return registeredUsers
                 .FirstOrDefault(user => user.Credentials.UserName.Equals(username, StringComparison.Ordinal));
         }
+
+        public bool SaveUser(string username, string password)
+        {
+            return true;
+        }
+
+        public bool UpdateUser(User user)
+        {
+            return true;
+        }
     }
 }

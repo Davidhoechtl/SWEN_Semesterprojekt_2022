@@ -1,5 +1,7 @@
 ﻿using Autofac;
+using MonsterTradingCardGame_Hoechtl.Handler;
 using MTCG.Infrastructure;
+using MTCG.Logic.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +28,7 @@ namespace MonsterTradingCardGame_Hoechtl
         {
             RegisterInfrastructure();
             RegisterRepository();
-            RegisterService();
+            RegisterModules();
         }
 
         private void RegisterInfrastructure()
@@ -39,10 +41,23 @@ namespace MonsterTradingCardGame_Hoechtl
 
         private void RegisterRepository()
         {
+            // Muss gegen die echten repositories ausgetauscht werden
+            builder.RegisterTypes(
+                typeof(MockUserRepository),
+                typeof(MockCardRepository)
+            )
+            .SingleInstance()
+            .AsImplementedInterfaces();
         }
 
-        private void RegisterService()
+        private void RegisterModules()
         {
+            builder.RegisterTypes(
+                typeof(BattleModule),
+                typeof(TradingModule),
+                typeof(UserModule)
+            )
+            .SingleInstance();
         }
     }
 }
