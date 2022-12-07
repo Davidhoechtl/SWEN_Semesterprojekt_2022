@@ -33,8 +33,9 @@ namespace MonsterTradingCardGame_Hoechtl
 
         private void RegisterInfrastructure()
         {
-            builder.RegisterType(
-                typeof(PackageFactory)
+            builder.RegisterTypes(
+                typeof(PackageFactory),
+                typeof(Server)
             )
             .SingleInstance();
         }
@@ -57,7 +58,8 @@ namespace MonsterTradingCardGame_Hoechtl
                 typeof(TradingModule),
                 typeof(UserModule)
             )
-            .SingleInstance();
+            .SingleInstance()
+            .AsImplementedInterfaces();
         }
     }
 }

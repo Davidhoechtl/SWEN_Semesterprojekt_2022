@@ -5,8 +5,11 @@ using Newtonsoft.Json;
 
 namespace MonsterTradingCardGame_Hoechtl.Handler
 {
-    internal class UserModule
+    internal class UserModule : IHandler
     {
+        public string ModuleName => "User";
+        public Func<string, HttpResponse> HandlerAction => HandleRequest;
+
         private readonly IUserRepository userRepository;
 
         public UserModule(IUserRepository userRepository)
@@ -14,24 +17,29 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             this.userRepository = userRepository;
         }
 
-        public ResponseMessage RegisterUser(UserCredentials userCredentials)
+        public HttpResponse HandleRequest(string functionPath)
+        {
+            return new HttpResponse(200, "OK", string.Empty);
+        }
+
+        private HttpResponse RegisterUser(UserCredentials userCredentials)
         {
             bool alreadyInDatabase = userRepository.GetUserByUsername(userCredentials.UserName) != null;
             if (alreadyInDatabase)
             {
-                return new ResponseMessage(409, "User with same username already registered");
+                return new HttpResponse(409, "User with same username already registered", string.Empty);
             }
 
             // encrpyt passwort hier
             bool success = userRepository.SaveUser(userCredentials.UserName, userCredentials.Password);
             if (!success)
             {
-                return new ResponseMessage(400, $"Fehler beim Speichern des Users {userCredentials.UserName}.");
+                return new HttpResponse(400, $"Fehler beim Speichern des Users {userCredentials.UserName}.", string.Empty);
             }
-            return new ResponseMessage(201);
+            return new HttpResponse(201, "Ok", string.Empty);
         }
 
-        public ResponseMessage LoginUser(UserCredentials userCredentials)
+        private HttpResponse LoginUser(UserCredentials userCredentials)
         {
             User user = userRepository.GetUserByUsername(userCredentials.UserName);
             if (user != null)
@@ -40,29 +48,29 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                 if (user.Credentials.Password.Equals(userCredentials.Password, StringComparison.Ordinal))
                 {
                     // retrun session Token
-                    return new ResponseMessage(200, "User login successful");
+                    return new HttpResponse(200, "User login successful", string.Empty);
                 }
             }
 
-            return new ResponseMessage(401, "Invalid username/password provided");
+            return new HttpResponse(401, "Invalid username/password provided", string.Empty);
         }
 
-        public ResponseMessage GetUser(string username)
+        private HttpResponse GetUser(string username)
         {
             User user = userRepository.GetUserByUsername(username);
             if (user == null)
             {
-                return new ResponseMessage(404, "User not found.");
+                return new HttpResponse(404, "User not found.", string.Empty);
             }
 
             string userData = JsonConvert.SerializeObject(user);
-            return new ResponseMessage(200)
+            return new HttpResponse(200, "OK", string.Empty)
             {
                 Content = userData
             };
         }
 
-        public ResponseMessage UpdateUser(string username, string test)
+        private HttpResponse UpdateUser(string username, string test)
         {
             User user = userRepository.GetUserByUsername(username);
             if (user != null)
@@ -71,15 +79,15 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                 bool success = userRepository.UpdateUser(user);
                 if (success)
                 {
-                    return new ResponseMessage(200, "User sucessfully updated.");
+                    return new HttpResponse(200, "User sucessfully updated.", string.Empty);
                 }
                 else
                 {
-                    return new ResponseMessage(500, "User was found, but there was an intern error");
+                    return new HttpResponse(500, "User was found, but there was an intern error", string.Empty);
                 }
             }
 
-            return new ResponseMessage(404, "User not found.");
+            return new HttpResponse(404, "User not found.", string.Empty);
         }
     }
 }

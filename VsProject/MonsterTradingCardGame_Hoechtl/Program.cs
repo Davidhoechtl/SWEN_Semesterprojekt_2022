@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using MonsterTradingCardGame_Hoechtl.Handler;
 using MTCG.Models;
+using System.Xml.Schema;
 
 namespace MonsterTradingCardGame_Hoechtl
 {
@@ -19,8 +20,8 @@ namespace MonsterTradingCardGame_Hoechtl
             // build des Containers
             container = bootstrapper.Build();
 
-            Server accessPoint = new Server();
-            accessPoint.Open();
+            Server accessPoint = container.Resolve<Server>();
+            accessPoint.Start();
         }
     }
 }

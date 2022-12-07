@@ -1,47 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
 
 namespace MonsterTradingCardGame_Hoechtl
 {
+    using MonsterTradingCardGame_Hoechtl.Handler;
+    using MonsterTradingCardGame_Hoechtl.Infrastructure;
+    using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Threading.Tasks;
     internal class Server
     {
-        public void Open()
+        public IEnumerable<IHandler> Handlers { get; private set; }
+
+        private const string address = "127.0.0.1";
+        private const int port = 8000;
+        private int requestCount = 0;
+
+        public Server(IEnumerable<IHandler> handlerModules)
         {
-            TcpListener httpServer = new TcpListener(IPAddress.Loopback, 8000);
+            this.Handlers = handlerModules;
+        }
+
+        public void Start()
+        {
+            TcpListener httpServer = new TcpListener(IPAddress.Any, port);
             httpServer.Start();
+
+            Console.WriteLine($"Server listens on {address}:{port}...");
             while (true)
             {
-                TcpClient clientSocket = httpServer.AcceptTcpClient();
-                Task.Factory.StartNew(() =>
+                TcpClient client = httpServer.AcceptTcpClient();
+
+                requestCount++;
+
+                // reader.close would lead also to writer.close
+                StreamReader reader = new StreamReader(client.GetStream());
+                StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = false };
+
+                HttpRequest request = new HttpRequest(reader);
+                Console.WriteLine(request);
+
+                HttpResponse response = null;
+                IHandler handler = GetHandlerByName(request.RequestPathData[0]);
+                if(handler != null)
                 {
-                    var writer = new StreamWriter(clientSocket.GetStream()) { AutoFlush = false };
-                    var reader = new StreamReader(clientSocket.GetStream());
+                    response = handler.HandlerAction(request.RequestPathData.Skip(1).ToString());
+                }
+                else
+                {
+                    response = new HttpResponse(404, "Not Found", string.Empty);
+                }
 
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        Console.WriteLine(line);
-                        if (line.Length == 0)
-                        {
-                            break;
-                        }
-                    }
-
-                    writer.WriteLine("HTTP/1.1 200 Ok");
-                    writer.WriteLine();
-                    writer.WriteLine("<html><body>Hello World!</body></html>");
-
-                    Thread.Sleep(10000);
-
-                    writer.Flush();
-                    writer.Close();
-                });
+                response.SendOn(writer);
             }
+        }
+
+        private IHandler GetHandlerByName(string name)
+        {
+            foreach(IHandler handler in Handlers)
+            {
+                if(handler.ModuleName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return handler;
+                }
+            }
+
+            return null;
         }
     }
 }
