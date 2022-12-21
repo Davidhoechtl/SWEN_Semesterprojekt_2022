@@ -1,4 +1,5 @@
-﻿using MonsterTradingCardGame_Hoechtl.Infrastructure;
+﻿using MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes;
+using MonsterTradingCardGame_Hoechtl.Infrastructure;
 using MTCG.Logic.Infrastructure.Repositories;
 using MTCG.Models;
 using Newtonsoft.Json;
@@ -22,6 +23,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             return new HttpResponse(200, "OK", string.Empty);
         }
 
+        [Post]
         private HttpResponse RegisterUser(UserCredentials userCredentials)
         {
             bool alreadyInDatabase = userRepository.GetUserByUsername(userCredentials.UserName) != null;
@@ -39,6 +41,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             return new HttpResponse(201, "Ok", string.Empty);
         }
 
+        [Post]
         private HttpResponse LoginUser(UserCredentials userCredentials)
         {
             User user = userRepository.GetUserByUsername(userCredentials.UserName);
@@ -55,6 +58,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             return new HttpResponse(401, "Invalid username/password provided", string.Empty);
         }
 
+        [Get]
         private HttpResponse GetUser(string username)
         {
             User user = userRepository.GetUserByUsername(username);
@@ -70,7 +74,8 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             };
         }
 
-        private HttpResponse UpdateUser(string username, string test)
+        [Post]
+        private HttpResponse UpdateUser(string username)
         {
             User user = userRepository.GetUserByUsername(username);
             if (user != null)
