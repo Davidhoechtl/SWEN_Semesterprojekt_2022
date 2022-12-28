@@ -1,9 +1,11 @@
 ﻿using Autofac;
 using MonsterTradingCardGame_Hoechtl.Handler;
+using MTCG.DAL;
 using MTCG.Infrastructure;
 using MTCG.Logic.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +35,9 @@ namespace MonsterTradingCardGame_Hoechtl
 
         private void RegisterInfrastructure()
         {
+            DatabaseIoC databaseIoC = new(builder);
+            databaseIoC.Load();
+
             builder.RegisterTypes(
                 typeof(PackageFactory),
                 typeof(HandlerMethodResolver),
@@ -45,7 +50,7 @@ namespace MonsterTradingCardGame_Hoechtl
         {
             // Muss gegen die echten repositories ausgetauscht werden
             builder.RegisterTypes(
-                typeof(MockUserRepository),
+                typeof(UserRepository),
                 typeof(MockCardRepository)
             )
             .SingleInstance()

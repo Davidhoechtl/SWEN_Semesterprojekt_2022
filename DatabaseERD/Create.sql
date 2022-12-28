@@ -3,7 +3,7 @@
 BEGIN;
 
 
-CREATE TABLE IF NOT EXISTS public."Users"
+CREATE TABLE IF NOT EXISTS public.users
 (
     "user_Id" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     "Username" character varying(20)[] NOT NULL,
@@ -11,10 +11,10 @@ CREATE TABLE IF NOT EXISTS public."Users"
     PRIMARY KEY ("user_Id")
 );
 
-COMMENT ON TABLE public."Users"
+COMMENT ON TABLE public.users
     IS 'Table for Users';
 
-CREATE TABLE IF NOT EXISTS public."Cards"
+CREATE TABLE IF NOT EXISTS public.cards
 (
     card_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     "Name" character varying NOT NULL,
@@ -22,30 +22,30 @@ CREATE TABLE IF NOT EXISTS public."Cards"
     PRIMARY KEY (card_id)
 );
 
-COMMENT ON TABLE public."Cards"
+COMMENT ON TABLE public.cards
     IS 'All avaiable Cards in the Game';
 
-CREATE TABLE IF NOT EXISTS public."Users_Cards"
+CREATE TABLE IF NOT EXISTS public.users_cards
 (
     card_id integer NOT NULL,
     user_id integer NOT NULL,
     PRIMARY KEY (card_id, user_id)
 );
 
-COMMENT ON TABLE public."Users_Cards"
+COMMENT ON TABLE public.users_cards
     IS 'Connection between User and Cards. Maps all cards a user has';
 
-ALTER TABLE IF EXISTS public."Users_Cards"
+ALTER TABLE IF EXISTS public.users_cards
     ADD FOREIGN KEY (card_id)
-    REFERENCES public."Cards" (card_id) MATCH SIMPLE
+    REFERENCES public.cards (card_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS public."Users_Cards"
+ALTER TABLE IF EXISTS public.users_cards
     ADD FOREIGN KEY (user_id)
-    REFERENCES public."Users" ("user_Id") MATCH SIMPLE
+    REFERENCES public.users ("user_Id") MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
