@@ -8,7 +8,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
 {
     internal class UserModule : IHandler
     {
-        public string ModuleName => "User";
+        public string ModuleName => "Users";
         public Func<string, HttpResponse> HandlerAction => HandleRequest;
 
         private readonly IUserRepository userRepository;
@@ -24,7 +24,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         [Post]
-        private HttpResponse RegisterUser(UserCredentials userCredentials)
+        public HttpResponse RegisterUser(UserCredentials userCredentials)
         {
             bool alreadyInDatabase = userRepository.GetUserByUsername(userCredentials.UserName) != null;
             if (alreadyInDatabase)
@@ -42,7 +42,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         [Post]
-        private HttpResponse LoginUser(UserCredentials userCredentials)
+        public HttpResponse LoginUser(UserCredentials userCredentials)
         {
             User user = userRepository.GetUserByUsername(userCredentials.UserName);
             if (user != null)
@@ -59,7 +59,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         [Get]
-        private HttpResponse GetUser(string username)
+        public HttpResponse GetUser(string username)
         {
             User user = userRepository.GetUserByUsername(username);
             if (user == null)
@@ -75,7 +75,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         [Post]
-        private HttpResponse UpdateUser(string username)
+        public HttpResponse UpdateUser(string username)
         {
             User user = userRepository.GetUserByUsername(username);
             if (user != null)

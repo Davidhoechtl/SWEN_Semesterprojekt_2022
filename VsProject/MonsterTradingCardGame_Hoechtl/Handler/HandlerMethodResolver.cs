@@ -1,66 +1,72 @@
-﻿using MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes;
-using MonsterTradingCardGame_Hoechtl.Infrastructure;
-using Newtonsoft.Json;
-using System.Net.Mail;
-using System.Reflection;
-
+﻿
 namespace MonsterTradingCardGame_Hoechtl.Handler
 {
+
+    using MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes;
+    using MonsterTradingCardGame_Hoechtl.Infrastructure;
+    using Newtonsoft.Json;
+    using System.Reflection;
+
     internal class HandlerMethodResolver
     {
-        public HandlerMethodResolver(IEnumerable<IHandler> handlers)
+        public HttpResponse InvokeHandlerMethod(IHandler handler, HttpMethod httpMethod, string[] pathData, string jsonContent)
         {
-            this.handlers = handlers;
-        }
+            string methodName = GetMethodNameFromMethodPath(pathData);
+            Type implentation = handler.GetType();
 
-        public HttpResponse InvokeHandlerMethod(Infrastructure.HttpMethod httpMethod, string methodPath, string jsonContent)
-        {
-            foreach (IHandler handler in handlers)
+            foreach (MethodInfo methodInfo in implentation.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))
             {
-                Type implentation = handler.GetType();
-
-                foreach (MethodInfo methodInfo in implentation.GetMethods())
+                HttpAttribute attr = methodInfo.GetCustomAttributes(typeof(HttpAttribute), true).FirstOrDefault() as HttpAttribute;
+                if (attr == null)
                 {
-                    HttpAttribute attr = methodInfo.GetCustomAttributes(typeof(HttpAttribute), true).FirstOrDefault() as HttpAttribute;
-                    if (attr == null)
+                    // Method without a HttpAttribute
+                    continue;
+                }
+
+                if (attr.Method == httpMethod &&
+                   methodName.Equals(methodInfo.Name, StringComparison.Ordinal))
+                {
+                    ParameterInfo[] parameters = methodInfo.GetParameters();
+                    object[] parsedParameter = ParseParameter(parameters.FirstOrDefault(), jsonContent);
+
+                    try
                     {
-                        // Method without a HttpAttribute
-                        continue;
+                        object returnValue = methodInfo.Invoke(handler, parsedParameter);
+
+                        if (returnValue is not HttpResponse)
+                        {
+                            throw new Exception("Method was excecuted succsessfully but the return vlaue is not a HttpResponse.");
+                        }
+
+                        return returnValue as HttpResponse;
                     }
-
-                    if (attr.Method == httpMethod &&
-                       methodPath.Equals(methodInfo.Name, StringComparison.Ordinal))
+                    catch (Exception ex)
                     {
-                        object[] parameters = methodInfo.GetParameters();
-                        object parameterObject = ParseParameter(methodInfo.GetParameters().FirstOrDefault(), jsonContent);
-
-                        try
-                        {
-                            object returnValue = methodInfo.Invoke(handler, new object[] { parameterObject });
-
-                            if( returnValue is not HttpResponse)
-                            {
-                                throw new Exception("Method was excecuted succsessfully but the return vlaue is not a HttpResponse.");
-                            }
-
-                            return returnValue as HttpResponse;
-                        }
-                        catch (Exception ex)
-                        {
-                            return null;
-                        }
+                        return null;
                     }
                 }
             }
+
             return null;
         }
 
-        private object ParseParameter(ParameterInfo firstParameter, string jsonContent)
+        private object[] ParseParameter(ParameterInfo firstParameter, string jsonContent)
         {
-            Type parameterType = firstParameter.ParameterType;
-            return JsonConvert.DeserializeObject(jsonContent, parameterType);
+            if(firstParameter == null)
+            {
+                return Array.Empty<object>();
+            }
+            else
+            {
+                Type parameterType = firstParameter.ParameterType;
+                object parsedParameter = JsonConvert.DeserializeObject(jsonContent, parameterType);
+                return new object[] { parsedParameter };
+            }
         }
 
-        private readonly IEnumerable<IHandler> handlers;
+        private string GetMethodNameFromMethodPath(string[] pathData)
+        {
+            return pathData.Skip(1).First();
+        }
     }
 }

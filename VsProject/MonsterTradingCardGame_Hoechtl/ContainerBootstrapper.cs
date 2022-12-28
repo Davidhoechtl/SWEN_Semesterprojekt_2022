@@ -26,15 +26,16 @@ namespace MonsterTradingCardGame_Hoechtl
 
         public void Register()
         {
-            RegisterInfrastructure();
             RegisterRepository();
             RegisterModules();
+            RegisterInfrastructure();
         }
 
         private void RegisterInfrastructure()
         {
             builder.RegisterTypes(
                 typeof(PackageFactory),
+                typeof(HandlerMethodResolver),
                 typeof(Server)
             )
             .SingleInstance();

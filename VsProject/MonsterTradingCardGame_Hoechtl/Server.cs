@@ -5,25 +5,23 @@ namespace MonsterTradingCardGame_Hoechtl
 {
     using MonsterTradingCardGame_Hoechtl.Handler;
     using MonsterTradingCardGame_Hoechtl.Infrastructure;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
     using System.Net.Sockets;
-    using System.Text;
-    using System.Threading.Tasks;
     internal class Server
     {
         public IEnumerable<IHandler> Handlers { get; private set; }
 
         private const string address = "127.0.0.1";
         private const int port = 8000;
+        private readonly HandlerMethodResolver handlerMethodResolver;
         private int requestCount = 0;
 
-        public Server(IEnumerable<IHandler> handlerModules)
+        public Server(IEnumerable<IHandler> handlerModules, HandlerMethodResolver handlerMethodResolver)
         {
             this.Handlers = handlerModules;
+            this.handlerMethodResolver = handlerMethodResolver;
         }
 
         public void Start()
@@ -45,11 +43,13 @@ namespace MonsterTradingCardGame_Hoechtl
                 HttpRequest request = new HttpRequest(reader);
                 Console.WriteLine(request);
 
+                string handlerName = GetHandlerNameFromRequest(request);
+                IHandler handler = GetHandlerByName(handlerName);
+
                 HttpResponse response = null;
-                IHandler handler = GetHandlerByName(request.RequestPathData[0]);
-                if(handler != null)
+                if (handler != null)
                 {
-                    response = handler.HandlerAction(request.RequestPathData.Skip(1).ToString());
+                    response = handlerMethodResolver.InvokeHandlerMethod(handler, request.Method, request.PathData, request.Content);
                 }
                 else
                 {
@@ -71,6 +71,11 @@ namespace MonsterTradingCardGame_Hoechtl
             }
 
             return null;
+        }
+
+        private string GetHandlerNameFromRequest(HttpRequest request)
+        {
+            return request.PathData[0];
         }
     }
 }

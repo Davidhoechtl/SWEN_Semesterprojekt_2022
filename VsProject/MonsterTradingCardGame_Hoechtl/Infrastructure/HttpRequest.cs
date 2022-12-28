@@ -12,7 +12,8 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
     {
         public string ProtocolVersion { get; set; }
         public HttpMethod Method { get; }
-        public string[] RequestPathData { get; }
+
+        public string[] PathData { get; }
 
         public Dictionary<string, string> Headers = new();
         public string Content { get; set; }
@@ -23,7 +24,7 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
             string line = reader.ReadLine();
             string[] firstLineData = line.Split(' ');
             Method = (HttpMethod)Enum.Parse(typeof(HttpMethod), firstLineData[0]);
-            RequestPathData = firstLineData[1].Split('/').Skip(1).ToArray();
+            PathData = firstLineData[1].Split('/').Skip(1).ToArray();
             ProtocolVersion = firstLineData[2];
 
             // Headers
@@ -84,7 +85,7 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
         {
             StringBuilder builder = new();
             
-            builder.AppendLine($"{Method} {ProtocolVersion} {string.Join(string.Empty, RequestPathData).ToString()}");
+            builder.AppendLine($"{Method} {ProtocolVersion} {string.Join('/', PathData).ToString()}");
             foreach(KeyValuePair<string, string> pair in Headers)
             {
                 builder.AppendLine($"{pair.Key}:{pair.Value}");
