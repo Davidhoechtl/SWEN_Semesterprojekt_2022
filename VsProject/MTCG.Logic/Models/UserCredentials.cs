@@ -16,5 +16,10 @@ namespace MTCG.Models
             UserName = username;
             Password = password;
         }
+
+        public UserCredentials()
+        {
+
+        }
     }
 }

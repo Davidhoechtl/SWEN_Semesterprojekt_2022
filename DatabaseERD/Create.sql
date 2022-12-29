@@ -5,10 +5,10 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS public.users
 (
-    "user_Id" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "Username" character varying(20)[] NOT NULL,
-    "Password" character varying(20) NOT NULL,
-    PRIMARY KEY ("user_Id")
+    "user_id" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+    username text NOT NULL,
+    password text NOT NULL,
+    PRIMARY KEY ("user_id")
 );
 
 COMMENT ON TABLE public.users
@@ -17,8 +17,8 @@ COMMENT ON TABLE public.users
 CREATE TABLE IF NOT EXISTS public.cards
 (
     card_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
-    "Name" character varying NOT NULL,
-    "Damage" real NOT NULL,
+    name text NOT NULL,
+    damage text NOT NULL,
     PRIMARY KEY (card_id)
 );
 

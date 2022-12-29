@@ -9,18 +9,10 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
     internal class UserModule : IHandler
     {
         public string ModuleName => "Users";
-        public Func<string, HttpResponse> HandlerAction => HandleRequest;
-
-        private readonly IUserRepository userRepository;
 
         public UserModule(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
-        }
-
-        public HttpResponse HandleRequest(string functionPath)
-        {
-            return new HttpResponse(200, "OK", string.Empty);
         }
 
         [Post]
@@ -94,5 +86,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
 
             return new HttpResponse(404, "User not found.", string.Empty);
         }
+
+        private readonly IUserRepository userRepository;
     }
 }

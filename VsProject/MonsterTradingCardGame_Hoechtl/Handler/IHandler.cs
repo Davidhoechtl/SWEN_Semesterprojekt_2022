@@ -12,6 +12,5 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
     internal interface IHandler
     {
         string ModuleName { get; }
-        Func<string, HttpResponse> HandlerAction { get; }
     }
 }
