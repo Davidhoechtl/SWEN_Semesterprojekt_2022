@@ -17,26 +17,20 @@ namespace MTCG.Logic.Infrastructure.Repositories
             string sqlStatement = "SELECT user_Id, username, password FROM Users WHERE username = @username";
             User user = database.GetItem<User>(
                 sqlStatement,
-                reader =>
-                {
-                    User user = null;
-                    if (reader.IsOnRow)
-                    {
-                        user = new User()
-                        {
-                            Id = reader.GetInt32(0),
-                            Credentials = new UserCredentials()
-                            {
-                                UserName = reader.GetString(1),
-                                Password = reader.GetString(2)
-                            }
-                        };
-                    }
-
-                    reader.Close();
-                    return user;
-                },
+                ConvertUserFromReader,
                 new NpgsqlParameter("username", username)
+            );
+
+            return user;
+        }
+
+        public User GetUserById(int userId)
+        {
+            string sqlStatement = "SELECT user_Id, username, password FROM Users WHERE user_id = @user_Id";
+            User user = database.GetItem<User>(
+                sqlStatement,
+                ConvertUserFromReader,
+                new NpgsqlParameter("user_Id", userId)
             );
 
             return user;
@@ -61,12 +55,35 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             int affectedRows = database.ExecuteNonQuery(
                 sqlStatement,
-                new NpgsqlParameter("user_Id", user.Id)
+                new NpgsqlParameter("user_Id", user.Id),
+                new NpgsqlParameter("username", user.Credentials.UserName),
+                new NpgsqlParameter("password", user.Credentials.Password)
             );
 
             return affectedRows != 0;
         }
-     
+
+        private User ConvertUserFromReader(NpgsqlDataReader reader)
+        {
+            User user = null;
+
+            if (reader.IsOnRow)
+            {
+                user = new User()
+                {
+                    Id = reader.GetInt32(0),
+                    Credentials = new UserCredentials()
+                    {
+                        UserName = reader.GetString(1),
+                        Password = reader.GetString(2)
+                    }
+                };
+            }
+
+            reader.Close();
+            return user;
+        }
+
         private readonly IQueryDatabase database;
     }
 }

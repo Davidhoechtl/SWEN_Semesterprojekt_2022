@@ -7,5 +7,6 @@ namespace MTCG.Logic.Infrastructure.Repositories
         bool SaveUser( string username, string password );
         bool UpdateUser(User user);
         User GetUserByUsername(string username);
+        User GetUserById(int userId);
     }
 }

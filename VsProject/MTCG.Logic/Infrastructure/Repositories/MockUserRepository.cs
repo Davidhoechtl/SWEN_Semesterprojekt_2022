@@ -20,6 +20,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
             }
         };
 
+        public User GetUserById(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public User GetUserByUsername(string username)
         {
             return registeredUsers

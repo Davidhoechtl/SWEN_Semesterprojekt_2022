@@ -66,17 +66,22 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             };
         }
 
-        [Post]
-        public HttpResponse UpdateUser(string username)
+        [Put]
+        public HttpResponse UpdateUser(User user)
         {
-            User user = userRepository.GetUserByUsername(username);
             if (user != null)
             {
                 // update user data here
                 bool success = userRepository.UpdateUser(user);
                 if (success)
                 {
-                    return new HttpResponse(200, "User sucessfully updated.", string.Empty);
+                    User updatedUser = userRepository.GetUserById(user.Id);
+                    string userData = JsonConvert.SerializeObject(updatedUser);
+
+                    return new HttpResponse(200, "User sucessfully updated.", string.Empty) 
+                    {
+                        Content = userData
+                    };
                 }
                 else
                 {
