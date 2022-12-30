@@ -4,7 +4,7 @@
 namespace MonsterTradingCardGame_Hoechtl
 {
     using MonsterTradingCardGame_Hoechtl.Handler;
-    using MonsterTradingCardGame_Hoechtl.Infrastructure;
+    using MonsterTradingCardGame_Hoechtl.Models;
     using System;
     using System.Collections.Generic;
     using System.Net;
@@ -46,14 +46,10 @@ namespace MonsterTradingCardGame_Hoechtl
                 string handlerName = GetHandlerNameFromRequest(request);
                 IHandler handler = GetHandlerByName(handlerName);
 
-                HttpResponse response = null;
+                HttpResponse response = new HttpResponse(404, "Not Found", string.Empty);
                 if (handler != null)
                 {
-                    response = handlerMethodResolver.InvokeHandlerMethod(handler, request.Method, request.PathData, request.Content);
-                }
-                else
-                {
-                    response = new HttpResponse(404, "Not Found", string.Empty);
+                    response = handlerMethodResolver.InvokeHandlerMethod(handler, request.Method, request.PathData, request.Content, request.AuthenticationToken);
                 }
 
                 response.SendOn(writer);

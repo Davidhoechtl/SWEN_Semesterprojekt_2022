@@ -1,8 +1,7 @@
-﻿
-namespace MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes
+﻿namespace MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes
 {
     internal class GetAttribute : HttpAttribute
     {
-        public override Infrastructure.HttpMethod Method => Infrastructure.HttpMethod.GET;
+        public override Models.HttpMethod Method => Models.HttpMethod.GET;
     }
 }

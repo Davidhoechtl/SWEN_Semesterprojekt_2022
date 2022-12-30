@@ -1,5 +1,4 @@
-﻿
-namespace MonsterTradingCardGame_Hoechtl.Infrastructure
+﻿namespace MonsterTradingCardGame_Hoechtl.Models
 {
     internal class HttpResponse
     {
@@ -10,7 +9,7 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
         public string ContentType { get; set; } = "application/json";
         public int ContentLength => Content?.Length ?? 0;
 
-        public HttpResponse(int statusCode, string message, string content)
+        public HttpResponse(int statusCode, string message, string content = "")
         {
             StatusCode = statusCode;
             Content = content;
@@ -20,7 +19,7 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
         public void SendOn(StreamWriter writer)
         {
             writer.WriteLine($"HTTP/1.1 {StatusCode} {ResponseMessage}");
-            if(ContentLength > 0)
+            if (ContentLength > 0)
             {
                 writer.WriteLine($"Content-Type:{ContentType}");
                 writer.WriteLine($"Content-Length:{ContentLength}");

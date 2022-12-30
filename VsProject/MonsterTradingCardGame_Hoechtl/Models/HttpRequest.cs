@@ -6,7 +6,7 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonsterTradingCardGame_Hoechtl.Infrastructure
+namespace MonsterTradingCardGame_Hoechtl.Models
 {
     internal class HttpRequest
     {
@@ -17,6 +17,7 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
 
         public Dictionary<string, string> Headers = new();
         public string Content { get; set; }
+        public string AuthenticationToken => Headers.GetValueOrDefault("Authorization");
 
         public HttpRequest(StreamReader reader)
         {
@@ -29,9 +30,9 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
 
             // Headers
             int contentLength = 0;
-            while((line = reader.ReadLine()) != null)
+            while ((line = reader.ReadLine()) != null)
             {
-                if(line.Length == 0)
+                if (line.Length == 0)
                 {
                     break;
                 }
@@ -84,9 +85,9 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
         public override string ToString()
         {
             StringBuilder builder = new();
-            
+
             builder.AppendLine($"{Method} {ProtocolVersion} {string.Join('/', PathData).ToString()}");
-            foreach(KeyValuePair<string, string> pair in Headers)
+            foreach (KeyValuePair<string, string> pair in Headers)
             {
                 builder.AppendLine($"{pair.Key}:{pair.Value}");
             }

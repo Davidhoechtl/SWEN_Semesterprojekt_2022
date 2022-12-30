@@ -1,5 +1,7 @@
 ﻿using MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes;
+using MonsterTradingCardGame_Hoechtl.Handler.PremissionAttributes;
 using MonsterTradingCardGame_Hoechtl.Infrastructure;
+using MonsterTradingCardGame_Hoechtl.Models;
 using MTCG.Logic.Infrastructure.Repositories;
 using MTCG.Models;
 using Newtonsoft.Json;
@@ -10,12 +12,14 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
     {
         public string ModuleName => "Users";
 
-        public UserModule(IUserRepository userRepository)
+        public UserModule(IUserRepository userRepository, SessionService sessionService)
         {
             this.userRepository = userRepository;
+            this.sessionService = sessionService;
         }
 
         [Post]
+        [NoPremissionRequired]
         public HttpResponse RegisterUser(UserCredentials userCredentials)
         {
             bool alreadyInDatabase = userRepository.GetUserByUsername(userCredentials.UserName) != null;
@@ -34,7 +38,8 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         [Post]
-        public HttpResponse LoginUser(UserCredentials userCredentials)
+        [NoPremissionRequired]
+        public HttpResponse LoginUser(SessionContext context, UserCredentials userCredentials)
         {
             User user = userRepository.GetUserByUsername(userCredentials.UserName);
             if (user != null)
@@ -43,7 +48,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                 if (user.Credentials.Password.Equals(userCredentials.Password, StringComparison.Ordinal))
                 {
                     // retrun session Token
-                    return new HttpResponse(200, "User login successful", string.Empty);
+                    return new HttpResponse(200, "User login successful", sessionService.CreateNewSessionKey(user.Id).ToString());
                 }
             }
 
@@ -51,47 +56,62 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         [Get]
-        public HttpResponse GetUser(string username)
+        public HttpResponse GetUser(SessionContext context, string username)
         {
             User user = userRepository.GetUserByUsername(username);
             if (user == null)
             {
-                return new HttpResponse(404, "User not found.", string.Empty);
+                return new HttpResponse(404, "User not found.");
             }
 
-            string userData = JsonConvert.SerializeObject(user);
-            return new HttpResponse(200, "OK", string.Empty)
+            if (sessionService.IsUsersKeyOrAdmin(context.SessionKey.Id, user.Id))
             {
-                Content = userData
-            };
+                string userData = JsonConvert.SerializeObject(user);
+                return new HttpResponse(200, "OK")
+                {
+                    Content = userData
+                };
+            }
+            else
+            {
+                return new HttpResponse(401, "Username does not belong to current session holder");
+            }
         }
 
         [Put]
-        public HttpResponse UpdateUser(User user)
+        public HttpResponse UpdateUser(SessionContext context, User user)
         {
             if (user != null)
             {
-                // update user data here
-                bool success = userRepository.UpdateUser(user);
-                if (success)
+                if (sessionService.IsUsersKeyOrAdmin(context.SessionKey.Id, user.Id))
                 {
-                    User updatedUser = userRepository.GetUserById(user.Id);
-                    string userData = JsonConvert.SerializeObject(updatedUser);
-
-                    return new HttpResponse(200, "User sucessfully updated.", string.Empty) 
+                    // update user data here
+                    bool success = userRepository.UpdateUser(user);
+                    if (success)
                     {
-                        Content = userData
-                    };
+                        User updatedUser = userRepository.GetUserById(user.Id);
+                        string userData = JsonConvert.SerializeObject(updatedUser);
+
+                        return new HttpResponse(200, "User sucessfully updated.")
+                        {
+                            Content = userData
+                        };
+                    }
+                    else
+                    {
+                        return new HttpResponse(500, "User was found, but there was an intern error");
+                    }
                 }
                 else
                 {
-                    return new HttpResponse(500, "User was found, but there was an intern error", string.Empty);
+                    return new HttpResponse(401, "Username does not belong to current session holder");
                 }
             }
 
-            return new HttpResponse(404, "User not found.", string.Empty);
+            return new HttpResponse(404, "User not found.");
         }
 
         private readonly IUserRepository userRepository;
+        private readonly SessionService sessionService;
     }
 }

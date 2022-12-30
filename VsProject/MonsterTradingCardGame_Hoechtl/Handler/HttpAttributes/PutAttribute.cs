@@ -1,8 +1,7 @@
-﻿
-namespace MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes
+﻿namespace MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes
 {
     internal class PutAttribute : HttpAttribute
     {
-        public override Infrastructure.HttpMethod Method => Infrastructure.HttpMethod.PUT;
+        public override Models.HttpMethod Method => Models.HttpMethod.PUT;
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonsterTradingCardGame_Hoechtl.Infrastructure
+namespace MonsterTradingCardGame_Hoechtl.Models
 {
     internal enum HttpMethod
     {

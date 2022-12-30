@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using MonsterTradingCardGame_Hoechtl.Handler;
+using MonsterTradingCardGame_Hoechtl.Infrastructure;
 using MTCG.DAL;
 using MTCG.Infrastructure;
 using MTCG.Logic.Infrastructure.Repositories;
@@ -40,6 +41,7 @@ namespace MonsterTradingCardGame_Hoechtl
 
             builder.RegisterTypes(
                 typeof(PackageFactory),
+                typeof(SessionService),
                 typeof(HandlerMethodResolver),
                 typeof(Server)
             )

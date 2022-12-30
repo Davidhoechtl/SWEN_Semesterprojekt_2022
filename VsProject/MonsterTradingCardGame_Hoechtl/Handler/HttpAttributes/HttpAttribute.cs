@@ -9,6 +9,6 @@ namespace MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     internal abstract class HttpAttribute : Attribute
     {
-        public abstract Infrastructure.HttpMethod Method { get; }
+        public abstract Models.HttpMethod Method { get; }
     }
 }
