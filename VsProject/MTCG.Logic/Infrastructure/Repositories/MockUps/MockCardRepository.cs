@@ -1,6 +1,6 @@
 ﻿using MTCG.Models;
 
-namespace MTCG.Logic.Infrastructure.Repositories
+namespace MTCG.Logic.Infrastructure.Repositories.MockUps
 {
     public class MockCardRepository : ICardRepository
     {
@@ -64,6 +64,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
         public Card GetCardByName(string name)
         {
             return availableCards.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public IEnumerable<Card> GetUserCards(int user_Id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

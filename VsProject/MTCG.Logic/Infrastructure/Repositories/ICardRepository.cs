@@ -10,6 +10,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
     public interface ICardRepository
     {
         IEnumerable<Card> GetAllAvailableCards();
+        IEnumerable<Card> GetUserCards(int user_Id);
         Card GetCardByName(string name);
     }
 }

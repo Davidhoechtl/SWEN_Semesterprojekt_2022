@@ -1,6 +1,6 @@
 ﻿using MTCG.Models;
 
-namespace MTCG.Logic.Infrastructure.Repositories
+namespace MTCG.Logic.Infrastructure.Repositories.MockUps
 {
     public class MockUserRepository : IUserRepository
     {

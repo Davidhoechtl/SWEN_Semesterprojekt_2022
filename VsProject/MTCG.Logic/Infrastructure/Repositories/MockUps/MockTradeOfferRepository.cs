@@ -1,7 +1,7 @@
 ﻿using MTCG.Logic.Models.Trading;
 using MTCG.Models;
 
-namespace MTCG.Logic.Infrastructure.Repositories
+namespace MTCG.Logic.Infrastructure.Repositories.MockUps
 {
     internal class MockTradeOfferRepository : ITradeOfferRepository
     {
@@ -9,7 +9,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
         {
             new TradingOffer(
                 "Offer1",
-                "TestUser", 
+                "TestUser",
                 new MonsterCard()
                 {
                     Name = "Wolve",
