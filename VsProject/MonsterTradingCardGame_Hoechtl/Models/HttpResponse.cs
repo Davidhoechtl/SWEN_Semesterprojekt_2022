@@ -30,5 +30,20 @@
             writer.Flush();
             writer.Close();
         }
+
+        public static HttpResponse GetUnauthorizedResponse()
+        {
+            return new HttpResponse(401, "Unauthorized", string.Empty);
+        }
+
+        public static HttpResponse GetNotFoundResponse()
+        {
+            return new HttpResponse(404, "Not Found");
+        }
+
+        public static HttpResponse GetInternalServerErrorResponse()
+        {
+            return new HttpResponse(500, "Internal Server Error");
+        }
     }
 }

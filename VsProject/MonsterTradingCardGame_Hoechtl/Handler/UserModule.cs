@@ -1,5 +1,4 @@
 ﻿using MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes;
-using MonsterTradingCardGame_Hoechtl.Handler.PremissionAttributes;
 using MonsterTradingCardGame_Hoechtl.Infrastructure;
 using MonsterTradingCardGame_Hoechtl.Models;
 using MTCG.Logic.Infrastructure.Repositories;
@@ -19,8 +18,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         [Post]
-        [NoPremissionRequired]
-        public HttpResponse RegisterUser(UserCredentials userCredentials)
+        public HttpResponse RegisterUser(SessionContext context, UserCredentials userCredentials)
         {
             bool alreadyInDatabase = userRepository.GetUserByUsername(userCredentials.UserName) != null;
             if (alreadyInDatabase)
@@ -38,7 +36,6 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         [Post]
-        [NoPremissionRequired]
         public HttpResponse LoginUser(SessionContext context, UserCredentials userCredentials)
         {
             User user = userRepository.GetUserByUsername(userCredentials.UserName);
@@ -64,7 +61,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                 return new HttpResponse(404, "User not found.");
             }
 
-            if (sessionService.IsUsersKeyOrAdmin(context.SessionKey.Id, user.Id))
+            if (sessionService.IsValidUsersOrAdminKey(context.SessionKey.Id, user.Id))
             {
                 string userData = JsonConvert.SerializeObject(user);
                 return new HttpResponse(200, "OK")
@@ -74,7 +71,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             }
             else
             {
-                return new HttpResponse(401, "Username does not belong to current session holder");
+                return HttpResponse.GetUnauthorizedResponse();
             }
         }
 
@@ -83,7 +80,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         {
             if (user != null)
             {
-                if (sessionService.IsUsersKeyOrAdmin(context.SessionKey.Id, user.Id))
+                if (sessionService.IsValidUsersOrAdminKey(context.SessionKey.Id, user.Id))
                 {
                     // update user data here
                     bool success = userRepository.UpdateUser(user);
@@ -104,7 +101,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                 }
                 else
                 {
-                    return new HttpResponse(401, "Username does not belong to current session holder");
+                    return HttpResponse.GetUnauthorizedResponse();
                 }
             }
 

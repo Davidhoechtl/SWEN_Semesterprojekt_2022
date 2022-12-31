@@ -46,7 +46,7 @@ namespace MonsterTradingCardGame_Hoechtl
                 string handlerName = GetHandlerNameFromRequest(request);
                 IHandler handler = GetHandlerByName(handlerName);
 
-                HttpResponse response = new HttpResponse(404, "Not Found", string.Empty);
+                HttpResponse response = HttpResponse.GetNotFoundResponse();
                 if (handler != null)
                 {
                     response = handlerMethodResolver.InvokeHandlerMethod(handler, request.Method, request.PathData, request.Content, request.AuthenticationToken);

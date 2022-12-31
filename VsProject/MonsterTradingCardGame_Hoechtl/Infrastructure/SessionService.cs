@@ -1,8 +1,8 @@
 ﻿
 namespace MonsterTradingCardGame_Hoechtl.Infrastructure
 {
-    using MonsterTradingCardGame_Hoechtl.Handler.PremissionAttributes;
     using MonsterTradingCardGame_Hoechtl.Models;
+    using System;
 
     internal class SessionService
     {
@@ -22,27 +22,34 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
             return guid;
         }
 
-        public bool HasPermission(string sessionId, PermissionAttribute permissionAttribute)
+        public Permission GetPermissonOfKey(string sessionKey)
         {
-            SessionKey found = GetValidSessionKeyById(sessionId);
+            SessionKey found = GetValidSessionKeyById(sessionKey);
 
-            switch (permissionAttribute?.RequiredPermission)
-            {
-                case Permission.None: return true;
-                case Permission.Admin:
-                    if (found?.Premission == Permission.Admin)
-                    {
-                        return true;
-                    }
-                    return false;
-                default:
-                    if (found?.Premission == Permission.User || found?.Premission == Permission.Admin)
-                    {
-                        return true;
-                    }
-                    return false;
-            }
+            return found?.Permission ?? Permission.None;
         }
+
+        //public bool HasPermission(string sessionId, PermissionAttribute permissionAttribute)
+        //{
+        //    SessionKey found = GetValidSessionKeyById(sessionId);
+
+        //    switch (permissionAttribute?.RequiredPermission)
+        //    {
+        //        case Permission.None: return true;
+        //        case Permission.Admin:
+        //            if (found?.Permission == Permission.Admin)
+        //            {
+        //                return true;
+        //            }
+        //            return false;
+        //        default:
+        //            if (found?.Permission == Permission.User || found?.Permission == Permission.Admin)
+        //            {
+        //                return true;
+        //            }
+        //            return false;
+        //    }
+        //}
 
         public SessionKey GetValidSessionKeyById(string sessionKey)
         {
@@ -59,11 +66,14 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
             return null;
         }
 
-        public bool IsUsersKeyOrAdmin(string sessionKey, int userId)
+        public bool IsValidUsersOrAdminKey(string sessionKey, int userId)
         {
-            if(sessionKeys.TryGetValue(userId, out SessionKey key))
+            if( sessionKeys.TryGetValue(userId, out SessionKey userKey))
             {
-                return key.Id.Equals(sessionKey);
+                if (userKey != null)
+                {
+                    return userKey.Id.Equals(sessionKey);
+                }
             }
 
             return adminKey.Equals(sessionKey);

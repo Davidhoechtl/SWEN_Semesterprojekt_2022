@@ -1,9 +1,7 @@
 ﻿
 namespace MonsterTradingCardGame_Hoechtl.Handler
 {
-
     using MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes;
-    using MonsterTradingCardGame_Hoechtl.Handler.PremissionAttributes;
     using MonsterTradingCardGame_Hoechtl.Infrastructure;
     using MonsterTradingCardGame_Hoechtl.Models;
     using Newtonsoft.Json;
@@ -33,13 +31,6 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                 if (attr.Method == httpMethod &&
                    methodName.Equals(methodInfo.Name, StringComparison.Ordinal))
                 {
-                    // Check if requester is authenticated
-                    PermissionAttribute permissionAttribute = methodInfo.GetCustomAttributes(typeof(PermissionAttribute), true).FirstOrDefault() as PermissionAttribute;
-                    if (sessionService.HasPermission(sessionKey, permissionAttribute) == false)
-                    {
-                        return GetUnauthorizedResponse();
-                    }
-
                     // create parameter list
                     SessionContext context = sessionService.CreateSessionContext(sessionKey);
                     List<object> parameterCollection = new() { context };
@@ -62,12 +53,12 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                     }
                     catch (Exception ex)
                     {
-                        return GetInternalServerErrorResponse();
+                        return HttpResponse.GetInternalServerErrorResponse();
                     }
                 }
             }
 
-            return GetNotFoundResponse();
+            return HttpResponse.GetNotFoundResponse();
         }
 
         private object ParseParameter(ParameterInfo firstParameter, string jsonContent)
@@ -87,21 +78,6 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         private string GetMethodNameFromMethodPath(string[] pathData)
         {
             return pathData.Skip(1).First();
-        }
-
-        private HttpResponse GetUnauthorizedResponse()
-        {
-            return new HttpResponse(401, "Unauthorized", string.Empty);
-        }
-
-        private HttpResponse GetNotFoundResponse()
-        {
-            return new HttpResponse(404, "Not Found");
-        }
-
-        private HttpResponse GetInternalServerErrorResponse()
-        {
-            return new HttpResponse(500, "Internal Server Error");
         }
 
         private readonly SessionService sessionService;
