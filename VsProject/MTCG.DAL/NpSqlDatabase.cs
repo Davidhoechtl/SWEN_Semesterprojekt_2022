@@ -50,6 +50,24 @@ namespace MTCG.DAL
             return cmd.ExecuteNonQuery();
         }
 
+        public int? InsertAndGetLastIdentity(string statement, params NpgsqlParameter[] parameter)
+        {
+            NpgsqlCommand cmd = new NpgsqlCommand(statement, dbConnection);
+            foreach (var param in parameter)
+            {
+                cmd.Parameters.Add(param);
+            }
+            cmd.Prepare();
+
+            object? identity = cmd.ExecuteScalar();
+            if(identity != null)
+            {
+                return (int)identity;
+            }
+
+            return null;
+        }
+
         private readonly NpgsqlConnection dbConnection;
     }
 }
