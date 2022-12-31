@@ -5,13 +5,11 @@ namespace MTCG.Infrastructure
 {
     public class PackageFactory
     {
-        private readonly ICardRepository cardRepository;
         private readonly Random random;
         private Card[] avialableCards;
        
         public PackageFactory(ICardRepository cardRepository, Random random)
         {
-            this.cardRepository = cardRepository;
             this.random = random;
             avialableCards = cardRepository.GetAllAvailableCards().ToArray();
         }

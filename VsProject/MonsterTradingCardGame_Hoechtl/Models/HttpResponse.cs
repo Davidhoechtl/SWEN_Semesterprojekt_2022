@@ -31,6 +31,11 @@
             writer.Close();
         }
 
+        public static HttpResponse GetSuccessResponse()
+        {
+            return new HttpResponse(200, "Successfully performed Action.");
+        }
+
         public static HttpResponse GetUnauthorizedResponse()
         {
             return new HttpResponse(401, "Unauthorized", string.Empty);
