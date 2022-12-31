@@ -81,7 +81,15 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
 
         public SessionContext CreateSessionContext(string sessionKey)
         {
-            return new SessionContext() { SessionKey = GetValidSessionKeyById(sessionKey) };
+            return new SessionContext() {
+                SessionKey = GetValidSessionKeyById(sessionKey), 
+                UserId = GetUserIdBySessionKey(sessionKey) 
+            };
+        }
+
+        private int? GetUserIdBySessionKey( string sessionKey )
+        {
+            return sessionKeys.FirstOrDefault(pair => pair.Value.Id.Equals(sessionKey)).Key;
         }
     }
 }

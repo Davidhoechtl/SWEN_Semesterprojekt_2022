@@ -4,6 +4,7 @@ using MonsterTradingCardGame_Hoechtl.Infrastructure;
 using MTCG.DAL;
 using MTCG.Infrastructure;
 using MTCG.Logic.Infrastructure.Repositories;
+using MTCG.Logic.Infrastructure.Repositories.MockUps;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -43,6 +44,7 @@ namespace MonsterTradingCardGame_Hoechtl
                 typeof(PackageFactory),
                 typeof(SessionService),
                 typeof(HandlerMethodResolver),
+                typeof(Random),
                 typeof(Server)
             )
             .SingleInstance();
@@ -53,7 +55,8 @@ namespace MonsterTradingCardGame_Hoechtl
             // Muss gegen die echten repositories ausgetauscht werden
             builder.RegisterTypes(
                 typeof(UserRepository),
-                typeof(MockCardRepository)
+                typeof(PackageRepository),
+                typeof(CardRepository)
             )
             .SingleInstance()
             .AsImplementedInterfaces();
@@ -64,7 +67,8 @@ namespace MonsterTradingCardGame_Hoechtl
             builder.RegisterTypes(
                 typeof(BattleModule),
                 typeof(TradingModule),
-                typeof(UserModule)
+                typeof(UserModule),
+                typeof(PackageModule)
             )
             .SingleInstance()
             .AsImplementedInterfaces();

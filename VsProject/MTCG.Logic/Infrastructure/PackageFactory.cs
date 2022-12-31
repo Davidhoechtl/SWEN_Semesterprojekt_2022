@@ -5,12 +5,10 @@ namespace MTCG.Infrastructure
 {
     public class PackageFactory
     {
-        private readonly Random random;
         private Card[] avialableCards;
        
-        public PackageFactory(ICardRepository cardRepository, Random random)
+        public PackageFactory(ICardRepository cardRepository)
         {
-            this.random = random;
             avialableCards = cardRepository.GetAllAvailableCards().ToArray();
         }
 
@@ -19,19 +17,24 @@ namespace MTCG.Infrastructure
         /// </summary>
         /// <param name="cardCount"></param>
         /// <returns></returns>
-        public Package CreatePackage(int cardCount)
+        public Package CreatePackage(int cardCount, int price)
         {
             if (avialableCards.Length < cardCount)
             {
                 throw new Exception($"Not enough available Cards to generate Package (CardCount: {cardCount})");
             }
 
-            Package package = new();
-            for (int i = 0; i < cardCount; i++)
-            {
-                Card randomCard = avialableCards[random.Next(0, avialableCards.GetUpperBound(0))];
-                package.Cards.Add(randomCard);
-            }
+            List<int> randomCardIds = avialableCards
+                .OrderBy(x => Guid.NewGuid())
+                .Select(card => card.Id)
+                .Take(cardCount)
+                .ToList();
+
+            Package package = new() { 
+                Price = price,
+                CardIds = randomCardIds,
+                Active = true 
+            };
 
             return package;
         }

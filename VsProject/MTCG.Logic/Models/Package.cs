@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace MTCG.Models
 {
+    using System.Collections.Generic;
+
     public class Package
     {
-        public List<Card> Cards { get; init; } = new();
+        public int Id { get; set; }
+        public bool Active { get; set; }
+        public int Price { get; set; }
+        public List<int> CardIds { get; set; } = new();
     }
 }

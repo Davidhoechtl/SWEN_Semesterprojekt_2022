@@ -51,8 +51,8 @@ COMMENT ON TABLE public.packages
 CREATE TABLE IF NOT EXISTS public.packages_cards
 (
     package_id integer NOT NULL,
-    cards_id integer NOT NULL,
-    PRIMARY KEY (package_id, cards_id)
+    card_id integer NOT NULL,
+    PRIMARY KEY (package_id, card_id)
 );
 
 COMMENT ON TABLE public.packages_cards
@@ -103,7 +103,7 @@ ALTER TABLE IF EXISTS public.packages_cards
 
 
 ALTER TABLE IF EXISTS public.packages_cards
-    ADD FOREIGN KEY (cards_id)
+    ADD FOREIGN KEY (card_id)
     REFERENCES public.cards (card_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
