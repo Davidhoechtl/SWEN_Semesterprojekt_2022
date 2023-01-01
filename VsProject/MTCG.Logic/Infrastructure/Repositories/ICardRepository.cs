@@ -1,5 +1,6 @@
 ﻿using MTCG.DAL;
 using MTCG.Models;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
         IEnumerable<Card> GetAllAvailableCards(IQueryDatabase database);
         IEnumerable<Card> GetUserCards(int user_Id, IQueryDatabase database);
         Card GetCardByName(string name, IQueryDatabase database);
+
+        Card GetCardFromReader(NpgsqlDataReader reader);
     }
 }

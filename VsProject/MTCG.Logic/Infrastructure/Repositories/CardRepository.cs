@@ -89,7 +89,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        private Card GetCardFromReader(NpgsqlDataReader reader)
+        public Card GetCardFromReader(NpgsqlDataReader reader)
         {
             Card card = null;
 

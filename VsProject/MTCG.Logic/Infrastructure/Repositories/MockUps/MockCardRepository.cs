@@ -1,5 +1,6 @@
 ﻿using MTCG.DAL;
 using MTCG.Models;
+using Npgsql;
 
 namespace MTCG.Logic.Infrastructure.Repositories.MockUps
 {
@@ -70,6 +71,11 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
         public Card GetCardByName(string name, IQueryDatabase database)
         {
             return availableCards.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public Card GetCardFromReader(NpgsqlDataReader reader)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Card> GetUserCards(int user_Id, IQueryDatabase database)

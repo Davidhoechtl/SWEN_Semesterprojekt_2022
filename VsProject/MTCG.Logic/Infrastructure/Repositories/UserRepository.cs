@@ -7,9 +7,10 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
     public class UserRepository : IUserRepository
     {
-        public UserRepository( ICardRepository cardRepository)
+        public UserRepository( ICardRepository cardRepository, IDeckRepository deckRepository)
         {
             this.cardRepository = cardRepository;
+            this.deckRepository = deckRepository;
         }
 
         public User GetUserByUsername(string username, IQueryDatabase database)
@@ -26,6 +27,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             );
 
             user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
+            user.Deck = deckRepository.GetUsersDeck(user.Id, database);
 
             return user;
         }
@@ -40,6 +42,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             );
 
             user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
+            user.Deck = deckRepository.GetUsersDeck(user.Id, database);
 
             return user;
         }
@@ -69,6 +72,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             );
 
             UpdatedUserCards(user, database);
+            deckRepository.UpdateUsersDeck(user.Deck, database);
 
             return affectedRows != 0;
         }
@@ -157,5 +161,6 @@ namespace MTCG.Logic.Infrastructure.Repositories
         }
 
         private readonly ICardRepository cardRepository;
+        private readonly IDeckRepository deckRepository;
     }
 }
