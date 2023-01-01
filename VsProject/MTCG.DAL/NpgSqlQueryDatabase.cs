@@ -5,9 +5,9 @@ namespace MTCG.DAL
     using System;
     using System.Data;
 
-    public class NpSqlQueryDatabase : IQueryDatabase
+    public class NpgSqlQueryDatabase : IQueryDatabase
     {
-        public NpSqlQueryDatabase(IDbConnection dbConnection)
+        public NpgSqlQueryDatabase(IDbConnection dbConnection)
         {
             this.dbConnection = new NpgsqlConnection(dbConnection.ConnectionString);
             this.dbConnection.Open();

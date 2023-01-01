@@ -17,7 +17,7 @@ namespace MTCG.DAL
             builder.RegisterInstance(dbConnection);
 
             builder.RegisterTypes(
-               typeof(NpSqlQueryDatabase)
+               typeof(NpgSqlQueryDatabase)
             )
             .SingleInstance()
             .AsImplementedInterfaces();
