@@ -17,10 +17,15 @@ namespace MTCG.DAL
             builder.RegisterInstance(dbConnection);
 
             builder.RegisterTypes(
-               typeof(NpSqlDatabase)
+               typeof(NpSqlQueryDatabase)
             )
             .SingleInstance()
             .AsImplementedInterfaces();
+
+            builder.RegisterTypes(
+               typeof(UnitOfWorkFactory)
+            )
+            .SingleInstance();
         }
 
         private readonly ContainerBuilder builder;

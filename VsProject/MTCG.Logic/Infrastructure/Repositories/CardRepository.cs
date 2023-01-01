@@ -8,12 +8,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
     public class CardRepository : ICardRepository
     {
-        public CardRepository(IQueryDatabase database)
-        {
-            this.database = database;
-        }
-
-        public Card GetCardById(int id)
+        public Card GetCardById(int id, IQueryDatabase database)
         {
             string sqlStatement = "SELECT * FROM cards WHERE card_id = @cardId";
             return database.GetItem<Card>(
@@ -28,7 +23,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             );
         }
 
-        public IEnumerable<Card> GetAllAvailableCards()
+        public IEnumerable<Card> GetAllAvailableCards(IQueryDatabase database)
         {
             string sqlStatement = "SELECT * from cards";
 
@@ -53,7 +48,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return cards;
         }
 
-        public IEnumerable<Card> GetUserCards(int user_Id)
+        public IEnumerable<Card> GetUserCards(int user_Id, IQueryDatabase database)
         {
             string sqlStatement = 
                 @"SELECT * 
@@ -89,7 +84,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return cards;
         }
 
-        public Card GetCardByName(string name)
+        public Card GetCardByName(string name, IQueryDatabase database)
         {
             throw new NotImplementedException();
         }
@@ -137,7 +132,5 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 _ => throw new Exception($"Unrecognized Elementype {type}")
             };
         }
-
-        private readonly IQueryDatabase database;
     }
 }

@@ -6,13 +6,12 @@ namespace MTCG.Logic.Infrastructure.Repositories
 {
     public class PackageRepository : IPackageRepository
     {
-        public PackageRepository(IQueryDatabase database, ICardRepository cardRepository)
+        public PackageRepository( ICardRepository cardRepository)
         {
-            this.database = database;
             this.cardRepository = cardRepository;
         }
 
-        public Package GetRandomActivePackage()
+        public Package GetRandomActivePackage(IQueryDatabase database)
         {
             string sqlStatement =
                 @"SELECT *
@@ -26,15 +25,15 @@ namespace MTCG.Logic.Infrastructure.Repositories
             );
 
             // Can be optimized
-            foreach (int cardId in GetCardIdsOfPackage(package.Id))
+            foreach (int cardId in GetCardIdsOfPackage(package.Id, database))
             {
-                package.CardIds.Add(cardRepository.GetCardById(cardId));
+                package.CardIds.Add(cardRepository.GetCardById(cardId, database));
             }
 
             return package;
         }
 
-        public bool InsertPackage(Package package)
+        public bool InsertPackage(Package package, IUnitOfWork database)
         {
             string sqlStatement = "INSERT INTO packages (price, active) VALUES (@price, @active) RETURNING package_id";
 
@@ -62,7 +61,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return false;
         }
 
-        public bool UpdatedPackage(Package package)
+        public bool UpdatedPackage(Package package, IQueryDatabase database)
         {
             string sqlStatement = "UPDATE packages SET active = @active WHERE package_id = @packageId";
 
@@ -93,7 +92,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return package;
         }
 
-        private List<int> GetCardIdsOfPackage(int packageId)
+        private List<int> GetCardIdsOfPackage(int packageId, IQueryDatabase database)
         {
             string sqlStatement = "SELECT * FROM packages_cards WHERE package_id = @packageId";
             List<int> cardIds = database.GetItems(
@@ -115,7 +114,6 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return cardIds;
         }
 
-        private readonly IQueryDatabase database;
         private readonly ICardRepository cardRepository;
     }
 }

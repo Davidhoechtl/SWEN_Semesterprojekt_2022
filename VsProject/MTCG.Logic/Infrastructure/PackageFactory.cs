@@ -1,4 +1,5 @@
-﻿using MTCG.Logic.Infrastructure.Repositories;
+﻿using MTCG.DAL;
+using MTCG.Logic.Infrastructure.Repositories;
 using MTCG.Models;
 
 namespace MTCG.Infrastructure
@@ -7,9 +8,9 @@ namespace MTCG.Infrastructure
     {
         private Card[] avialableCards;
        
-        public PackageFactory(ICardRepository cardRepository)
+        public PackageFactory(IQueryDatabase database, ICardRepository cardRepository)
         {
-            avialableCards = cardRepository.GetAllAvailableCards().ToArray();
+            avialableCards = cardRepository.GetAllAvailableCards(database).ToArray();
         }
 
         /// <summary>

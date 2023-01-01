@@ -1,6 +1,7 @@
 ﻿using MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes;
 using MonsterTradingCardGame_Hoechtl.Infrastructure;
 using MonsterTradingCardGame_Hoechtl.Models;
+using MTCG.DAL;
 using MTCG.Logic.Infrastructure.Repositories;
 using MTCG.Models;
 using Newtonsoft.Json;
@@ -11,23 +12,29 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
     {
         public string ModuleName => "Users";
 
-        public UserModule(IUserRepository userRepository, SessionService sessionService)
+        public UserModule(
+            IQueryDatabase queryDatabase,
+            IUserRepository userRepository,
+            UnitOfWorkFactory unitOfWorkFactory,
+            SessionService sessionService)
         {
+            this.queryDatabase = queryDatabase;
             this.userRepository = userRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
             this.sessionService = sessionService;
         }
 
         [Post]
         public HttpResponse RegisterUser(SessionContext context, UserCredentials userCredentials)
         {
-            bool alreadyInDatabase = userRepository.GetUserByUsername(userCredentials.UserName) != null;
+            bool alreadyInDatabase = userRepository.GetUserByUsername(userCredentials.UserName, queryDatabase) != null;
             if (alreadyInDatabase)
             {
                 return new HttpResponse(409, "User with same username already registered", string.Empty);
             }
 
             // encrpyt passwort hier
-            bool success = userRepository.RegisterUser(userCredentials.UserName, userCredentials.Password);
+            bool success = userRepository.RegisterUser(userCredentials.UserName, userCredentials.Password, queryDatabase);
             if (!success)
             {
                 return new HttpResponse(400, $"Fehler beim Speichern des Users {userCredentials.UserName}.", string.Empty);
@@ -38,7 +45,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         [Post]
         public HttpResponse LoginUser(SessionContext context, UserCredentials userCredentials)
         {
-            User user = userRepository.GetUserByUsername(userCredentials.UserName);
+            User user = userRepository.GetUserByUsername(userCredentials.UserName, queryDatabase);
             if (user != null)
             {
                 // decrypt password
@@ -55,7 +62,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         [Get]
         public HttpResponse GetUser(SessionContext context, string username)
         {
-            User user = userRepository.GetUserByUsername(username);
+            User user = userRepository.GetUserByUsername(username, queryDatabase);
             if (user == null)
             {
                 return new HttpResponse(404, "User not found.");
@@ -82,11 +89,17 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             {
                 if (sessionService.IsValidUsersOrAdminKey(context.SessionKey.Id, user.Id))
                 {
-                    // update user data here
-                    bool success = userRepository.UpdateUser(user);
+                    bool success = false;
+                    using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateAndBeginTransaction())
+                    {
+                        // update user data here
+                        success = userRepository.UpdateUser(user, unitOfWork);
+                        unitOfWork.Commit();
+                    }
+                   
                     if (success)
                     {
-                        User updatedUser = userRepository.GetUserById(user.Id);
+                        User updatedUser = userRepository.GetUserById(user.Id, queryDatabase);
                         string userData = JsonConvert.SerializeObject(updatedUser);
 
                         return new HttpResponse(200, "User sucessfully updated.")
@@ -108,7 +121,9 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             return new HttpResponse(404, "User not found.");
         }
 
+        private readonly IQueryDatabase queryDatabase;
         private readonly IUserRepository userRepository;
+        private readonly UnitOfWorkFactory unitOfWorkFactory;
         private readonly SessionService sessionService;
     }
 }

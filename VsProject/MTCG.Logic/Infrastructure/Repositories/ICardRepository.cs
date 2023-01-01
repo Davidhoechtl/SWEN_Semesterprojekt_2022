@@ -1,4 +1,5 @@
-﻿using MTCG.Models;
+﻿using MTCG.DAL;
+using MTCG.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace MTCG.Logic.Infrastructure.Repositories
 {
     public interface ICardRepository
     {
-        Card GetCardById(int id);
-        IEnumerable<Card> GetAllAvailableCards();
-        IEnumerable<Card> GetUserCards(int user_Id);
-        Card GetCardByName(string name);
+        Card GetCardById(int id, IQueryDatabase database);
+        IEnumerable<Card> GetAllAvailableCards(IQueryDatabase database);
+        IEnumerable<Card> GetUserCards(int user_Id, IQueryDatabase database);
+        Card GetCardByName(string name, IQueryDatabase database);
     }
 }

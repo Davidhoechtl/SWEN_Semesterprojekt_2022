@@ -7,13 +7,12 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
     public class UserRepository : IUserRepository
     {
-        public UserRepository(IQueryDatabase database, ICardRepository cardRepository)
+        public UserRepository( ICardRepository cardRepository)
         {
-            this.database = database;
             this.cardRepository = cardRepository;
         }
 
-        public User GetUserByUsername(string username)
+        public User GetUserByUsername(string username, IQueryDatabase database)
         {
             string sqlStatement =
                 @"SELECT users.*
@@ -26,12 +25,12 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 new NpgsqlParameter("username", username)
             );
 
-            user.Stack = cardRepository.GetUserCards(user.Id).ToList();
+            user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
 
             return user;
         }
 
-        public User GetUserById(int userId)
+        public User GetUserById(int userId, IQueryDatabase database)
         {
             string sqlStatement = "SELECT * FROM Users WHERE user_id = @user_Id";
             User user = database.GetItem<User>(
@@ -40,12 +39,12 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 new NpgsqlParameter("user_Id", userId)
             );
 
-            user.Stack = cardRepository.GetUserCards(user.Id).ToList();
+            user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
 
             return user;
         }
 
-        public bool RegisterUser(string username, string password)
+        public bool RegisterUser(string username, string password, IQueryDatabase database)
         {
             string sqlStatement = "INSERT INTO Users (username, password) VALUES (@username, @password)";
 
@@ -58,7 +57,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return affectedRows != 0;
         }
 
-        public bool UpdateUser(User user)
+        public bool UpdateUser(User user, IUnitOfWork database)
         {
             string sqlStatement = "UPDATE Users SET username = @username, password = @password, coins = @coins WHERE user_Id = @user_Id";
             int affectedRows = database.ExecuteNonQuery(
@@ -69,12 +68,12 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 new NpgsqlParameter("coins", user.Coins)
             );
 
-            UpdatedUserCards(user);
+            UpdatedUserCards(user, database);
 
             return affectedRows != 0;
         }
 
-        public bool AddCardsToUser(int userId, int[] cardIds)
+        public bool AddCardsToUser(int userId, int[] cardIds, IQueryDatabase database)
         {
             string sqlStatement = "INSERT INTO users_cards (user_id, card_id) VALUES (@userId, @cardId)";
 
@@ -93,7 +92,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return affectedRows != 0;
         }
 
-        public bool RemoveCardsFromUser(int userId, int[] cardIds)
+        public bool RemoveCardsFromUser(int userId, int[] cardIds, IQueryDatabase database)
         {
             string sqlStatement = "DELETE users_cards WHERE user_id = @userId AND card_id = @cardId";
 
@@ -134,7 +133,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return user;
         }
 
-        private bool UpdatedUserCards(User user)
+        private bool UpdatedUserCards(User user, IQueryDatabase database)
         {
             string deleteStatement = "DELETE FROM users_cards WHERE user_id = @userId";
             int deleteDeltaRows = database.ExecuteNonQuery(
@@ -157,7 +156,6 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return true;
         }
 
-        private readonly IQueryDatabase database;
         private readonly ICardRepository cardRepository;
     }
 }

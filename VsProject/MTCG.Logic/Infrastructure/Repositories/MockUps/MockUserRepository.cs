@@ -1,4 +1,5 @@
-﻿using MTCG.Models;
+﻿using MTCG.DAL;
+using MTCG.Models;
 
 namespace MTCG.Logic.Infrastructure.Repositories.MockUps
 {
@@ -20,33 +21,33 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
             }
         };
 
-        public bool AddCardsToUser(int userId, int[] cardIds)
+        public bool AddCardsToUser(int userId, int[] cardIds, IQueryDatabase database)
         {
             throw new NotImplementedException();
         }
 
-        public User GetUserById(int userId)
+        public User GetUserById(int userId, IQueryDatabase database)
         {
             throw new NotImplementedException();
         }
 
-        public User GetUserByUsername(string username)
+        public User GetUserByUsername(string username, IQueryDatabase database)
         {
             return registeredUsers
                 .FirstOrDefault(user => user.Credentials.UserName.Equals(username, StringComparison.Ordinal));
         }
 
-        public bool RemoveCardsFromUser(int userId, int[] cardIds)
+        public bool RemoveCardsFromUser(int userId, int[] cardIds, IQueryDatabase database)
         {
             throw new NotImplementedException();
         }
 
-        public bool RegisterUser(string username, string password)
+        public bool RegisterUser(string username, string password, IQueryDatabase database)
         {
             return true;
         }
 
-        public bool UpdateUser(User user)
+        public bool UpdateUser(User user, IUnitOfWork database)
         {
             return true;
         }

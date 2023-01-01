@@ -1,15 +1,16 @@
-﻿using MTCG.Models;
+﻿using MTCG.DAL;
+using MTCG.Models;
 
 namespace MTCG.Logic.Infrastructure.Repositories
 {
     public interface IUserRepository
     {
-        bool RegisterUser( string username, string password );
-        bool UpdateUser(User user);
-        User GetUserByUsername(string username);
-        User GetUserById(int userId);
+        bool RegisterUser( string username, string password, IQueryDatabase database);
+        bool UpdateUser(User user, IUnitOfWork database);
+        User GetUserByUsername(string username, IQueryDatabase database);
+        User GetUserById(int userId, IQueryDatabase database);
 
-        bool AddCardsToUser(int userId, int[] cardIds);
-        bool RemoveCardsFromUser(int userId, int[] cardIds);
+        bool AddCardsToUser(int userId, int[] cardIds, IQueryDatabase database);
+        bool RemoveCardsFromUser(int userId, int[] cardIds, IQueryDatabase database);
     }
 }

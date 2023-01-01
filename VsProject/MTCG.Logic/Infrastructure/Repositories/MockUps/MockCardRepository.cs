@@ -1,4 +1,5 @@
-﻿using MTCG.Models;
+﻿using MTCG.DAL;
+using MTCG.Models;
 
 namespace MTCG.Logic.Infrastructure.Repositories.MockUps
 {
@@ -56,22 +57,22 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
             }
         };
 
-        public IEnumerable<Card> GetAllAvailableCards()
+        public IEnumerable<Card> GetAllAvailableCards(IQueryDatabase database)
         {
             return availableCards;
         }
 
-        public Card GetCardById(int id)
+        public Card GetCardById(int id, IQueryDatabase database)
         {
             throw new NotImplementedException();
         }
 
-        public Card GetCardByName(string name)
+        public Card GetCardByName(string name, IQueryDatabase database)
         {
             return availableCards.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public IEnumerable<Card> GetUserCards(int user_Id)
+        public IEnumerable<Card> GetUserCards(int user_Id, IQueryDatabase database)
         {
             throw new NotImplementedException();
         }
