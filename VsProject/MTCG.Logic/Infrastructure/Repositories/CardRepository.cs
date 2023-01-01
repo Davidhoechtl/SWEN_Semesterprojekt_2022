@@ -13,6 +13,21 @@ namespace MTCG.Logic.Infrastructure.Repositories
             this.database = database;
         }
 
+        public Card GetCardById(int id)
+        {
+            string sqlStatement = "SELECT * FROM cards WHERE card_id = @cardId";
+            return database.GetItem<Card>(
+                sqlStatement,
+                reader =>
+                {
+                    Card card = GetCardFromReader(reader);
+                    reader.Close();
+                    return card;
+                },
+                new NpgsqlParameter("cardId", id)
+            );
+        }
+
         public IEnumerable<Card> GetAllAvailableCards()
         {
             string sqlStatement = "SELECT * from cards";
@@ -41,7 +56,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
         public IEnumerable<Card> GetUserCards(int user_Id)
         {
             string sqlStatement = 
-                @"SELECT cards.* 
+                @"SELECT * 
                   FROM users
                   JOIN users_cards ON (users.user_id = users_cards.user_id)
                   JOIN cards       ON (users_cards.card_id = cards.card_id)
@@ -54,15 +69,21 @@ namespace MTCG.Logic.Infrastructure.Repositories
                     List<Card> cards = new List<Card>();
                     while (reader.Read())
                     {
-                        Card next = GetCardFromReader(reader);
-                        if (next != null)
+                        int count = reader.GetInt32(reader.GetOrdinal("count"));
+
+                        for (int i = 0; i < count; i++)
                         {
-                            cards.Add(next);
+                            Card next = GetCardFromReader(reader);
+                            if (next != null)
+                            {
+                                cards.Add(next);
+                            }
                         }
                     }
                     reader.Close();
                     return cards;
-                }
+                },
+                new NpgsqlParameter("userId", user_Id)
             );
 
             return cards;
@@ -79,26 +100,26 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             if (reader.IsOnRow)
             {
-                char cardType = reader.GetChar(3);
+                char cardType = reader.GetChar(reader.GetOrdinal("card_type"));
 
                 if(cardType == 'M')
                 {
                     card = new MonsterCard()
                     {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        Damage = reader.GetDouble(2),
-                        ElementTyp = ConvertCharToElementTyp(reader.GetChar(4))
+                        Id = reader.GetInt32(reader.GetOrdinal("card_id")),
+                        Name = reader.GetString(reader.GetOrdinal("name")),
+                        Damage = reader.GetDouble(reader.GetOrdinal("damage")),
+                        ElementTyp = ConvertCharToElementTyp(reader.GetChar(reader.GetOrdinal("element_type")))
                     };
                 }
                 else
                 {
                     card = new SpellCard()
                     {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        Damage = reader.GetDouble(2),
-                        ElementTyp = ConvertCharToElementTyp(reader.GetChar(4))
+                        Id = reader.GetInt32(reader.GetOrdinal("card_id")),
+                        Name = reader.GetString(reader.GetOrdinal("name")),
+                        Damage = reader.GetDouble(reader.GetOrdinal("damage")),
+                        ElementTyp = ConvertCharToElementTyp(reader.GetChar(reader.GetOrdinal("element_type")))
                     };
                 }  
             }
@@ -116,8 +137,6 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 _ => throw new Exception($"Unrecognized Elementype {type}")
             };
         }
-
-  
 
         private readonly IQueryDatabase database;
     }

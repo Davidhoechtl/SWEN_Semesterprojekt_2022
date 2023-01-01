@@ -6,17 +6,17 @@ namespace MTCG.Logic.Infrastructure.Repositories
 {
     public class PackageRepository : IPackageRepository
     {
-        public PackageRepository(IQueryDatabase database)
+        public PackageRepository(IQueryDatabase database, ICardRepository cardRepository)
         {
             this.database = database;
+            this.cardRepository = cardRepository;
         }
 
         public Package GetRandomActivePackage()
         {
             string sqlStatement =
-                @"SELECT packages.*
-                  FROM packages 
-                  JOIN packages_cards on (packages.package_id = packages_cards.package_id)
+                @"SELECT *
+                  FROM packages
                   WHERE Active = true 
                   LIMIT 1";
 
@@ -24,6 +24,12 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 sqlStatement,
                 ConvertPackageFromReader
             );
+
+            // Can be optimized
+            foreach (int cardId in GetCardIdsOfPackage(package.Id))
+            {
+                package.CardIds.Add(cardRepository.GetCardById(cardId));
+            }
 
             return package;
         }
@@ -40,13 +46,13 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             if (packageId.HasValue)
             {
-                foreach (int cardId in package.CardIds)
+                foreach (Card card in package.CardIds)
                 {
                     sqlStatement = "INSERT INTO packages_cards (package_id, card_id) VALUES (@packageId, @cardId)";
                     int affectedRows = database.ExecuteNonQuery(
                         sqlStatement,
                         new NpgsqlParameter("packageId", packageId.Value),
-                        new NpgsqlParameter("cardId", cardId)
+                        new NpgsqlParameter("cardId", card.Id)
                     );
                 }
 
@@ -72,7 +78,6 @@ namespace MTCG.Logic.Infrastructure.Repositories
         private Package ConvertPackageFromReader(NpgsqlDataReader reader)
         {
             Package package = null;
-            List<int> packageCards = new();
 
             if (reader.IsOnRow)
             {
@@ -82,20 +87,35 @@ namespace MTCG.Logic.Infrastructure.Repositories
                     Price = reader.GetInt32(1),
                     Active = reader.GetBoolean(2)
                 };
-
-                packageCards.Add(reader.GetInt32(reader.GetOrdinal("card_id")));
-                while (reader.Read())
-                {
-                    packageCards.Add(reader.GetInt32(reader.GetOrdinal("card_id")));
-                }
-
-                package.CardIds = packageCards;
             }
 
             reader.Close();
             return package;
         }
 
+        private List<int> GetCardIdsOfPackage(int packageId)
+        {
+            string sqlStatement = "SELECT * FROM packages_cards WHERE package_id = @packageId";
+            List<int> cardIds = database.GetItems(
+                sqlStatement,
+                reader =>
+                {
+                    List<int> cards = new();
+                    while (reader.Read())
+                    {
+                        cards.Add(reader.GetInt32(reader.GetOrdinal("card_id")));
+                    }
+
+                    reader.Close();
+                    return cards;
+                },
+                new NpgsqlParameter("packageId", packageId)
+            );
+
+            return cardIds;
+        }
+
         private readonly IQueryDatabase database;
+        private readonly ICardRepository cardRepository;
     }
 }

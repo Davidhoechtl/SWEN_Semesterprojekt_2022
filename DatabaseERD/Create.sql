@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS public.users
     user_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     username text NOT NULL,
     password text NOT NULL,
+    coins integer NOT NULL,
     PRIMARY KEY (user_id)
 );
 
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS public.users_cards
 (
     card_id integer NOT NULL,
     user_id integer NOT NULL,
+    count integer NOT NULL,
     PRIMARY KEY (card_id, user_id)
 );
 

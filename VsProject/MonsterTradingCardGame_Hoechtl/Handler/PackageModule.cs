@@ -12,9 +12,10 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
     {
         public string ModuleName => "Package";
 
-        public PackageModule(IPackageRepository packageRepository, PackageFactory packageFactory, Random rnd)
+        public PackageModule(IPackageRepository packageRepository, IUserRepository userRepository, PackageFactory packageFactory, Random rnd)
         {
             this.packageRepository = packageRepository;
+            this.userRepository = userRepository;
             this.packageFactory = packageFactory;
             this.rnd = rnd;
         }
@@ -46,25 +47,45 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         [Post]
-        public HttpResponse BuyPackage(SessionContext context, int packageId)
+        public HttpResponse BuyPackage(SessionContext context)
         {
-            if (context.UserId.HasValue)
+            if (!context.UserId.HasValue)
             {
                 return HttpResponse.GetUnauthorizedResponse();
             }
 
-            int userId = context.UserId.Value;
+            User user = userRepository.GetUserById(context.UserId.Value);
 
             Package package = packageRepository.GetRandomActivePackage();
-            if(package == null)
+            if (package == null)
             {
                 return new HttpResponse(404, "No Card package available for buying");
             }
 
-            return HttpResponse.GetSuccessResponse();
+            if(user.Coins < package.Price)
+            {
+                return new HttpResponse(403, "User doesn´t have enough coins.");
+            }
+
+            user.Stack.AddRange(package.CardIds);
+            user.Coins -= package.Price;
+            package.Active = false;
+
+            bool success = packageRepository.UpdatedPackage(package);
+            bool success2 = userRepository.UpdateUser(user);
+
+            if (success && success2)
+            {
+                return HttpResponse.GetSuccessResponse();
+            }
+            else
+            {
+                return HttpResponse.GetInternalServerErrorResponse();
+            }
         }
 
         private readonly IPackageRepository packageRepository;
+        private readonly IUserRepository userRepository;
         private readonly PackageFactory packageFactory;
         private readonly Random rnd;
     }

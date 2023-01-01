@@ -9,6 +9,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 {
     public interface ICardRepository
     {
+        Card GetCardById(int id);
         IEnumerable<Card> GetAllAvailableCards();
         IEnumerable<Card> GetUserCards(int user_Id);
         Card GetCardByName(string name);

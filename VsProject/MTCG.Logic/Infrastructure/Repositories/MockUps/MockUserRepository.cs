@@ -20,6 +20,11 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
             }
         };
 
+        public bool AddCardsToUser(int userId, int[] cardIds)
+        {
+            throw new NotImplementedException();
+        }
+
         public User GetUserById(int userId)
         {
             throw new NotImplementedException();
@@ -31,7 +36,12 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
                 .FirstOrDefault(user => user.Credentials.UserName.Equals(username, StringComparison.Ordinal));
         }
 
-        public bool SaveUser(string username, string password)
+        public bool RemoveCardsFromUser(int userId, int[] cardIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RegisterUser(string username, string password)
         {
             return true;
         }

@@ -27,7 +27,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             }
 
             // encrpyt passwort hier
-            bool success = userRepository.SaveUser(userCredentials.UserName, userCredentials.Password);
+            bool success = userRepository.RegisterUser(userCredentials.UserName, userCredentials.Password);
             if (!success)
             {
                 return new HttpResponse(400, $"Fehler beim Speichern des Users {userCredentials.UserName}.", string.Empty);

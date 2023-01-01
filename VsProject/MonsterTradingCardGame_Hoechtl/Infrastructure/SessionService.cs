@@ -89,7 +89,8 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
 
         private int? GetUserIdBySessionKey( string sessionKey )
         {
-            return sessionKeys.FirstOrDefault(pair => pair.Value.Id.Equals(sessionKey)).Key;
+            int foundUserId = sessionKeys.FirstOrDefault(pair => pair.Value.Id.Equals(sessionKey)).Key;
+            return foundUserId == 0 ? null : foundUserId;
         }
     }
 }

@@ -24,15 +24,14 @@ namespace MTCG.Infrastructure
                 throw new Exception($"Not enough available Cards to generate Package (CardCount: {cardCount})");
             }
 
-            List<int> randomCardIds = avialableCards
+            List<Card> randomCards = avialableCards
                 .OrderBy(x => Guid.NewGuid())
-                .Select(card => card.Id)
                 .Take(cardCount)
                 .ToList();
 
             Package package = new() { 
                 Price = price,
-                CardIds = randomCardIds,
+                CardIds = randomCards,
                 Active = true 
             };
 

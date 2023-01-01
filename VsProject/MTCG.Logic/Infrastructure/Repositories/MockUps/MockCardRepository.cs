@@ -61,6 +61,11 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
             return availableCards;
         }
 
+        public Card GetCardById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Card GetCardByName(string name)
         {
             return availableCards.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
