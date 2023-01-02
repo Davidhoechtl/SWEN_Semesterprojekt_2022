@@ -26,8 +26,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 new NpgsqlParameter("username", username)
             );
 
-            user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
-            user.Deck = deckRepository.GetUsersDeck(user.Id, database);
+            if(user != null)
+            {
+                user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
+                user.Deck = deckRepository.GetUsersDeck(user.Id, database);
+            }
 
             return user;
         }
@@ -41,8 +44,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 new NpgsqlParameter("user_Id", userId)
             );
 
-            user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
-            user.Deck = deckRepository.GetUsersDeck(user.Id, database);
+            if (user != null)
+            {
+                user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
+                user.Deck = deckRepository.GetUsersDeck(user.Id, database);
+            }
 
             return user;
         }
