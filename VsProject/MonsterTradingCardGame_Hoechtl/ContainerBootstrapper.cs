@@ -3,6 +3,7 @@ using MonsterTradingCardGame_Hoechtl.Handler;
 using MonsterTradingCardGame_Hoechtl.Infrastructure;
 using MTCG.DAL;
 using MTCG.Infrastructure;
+using MTCG.Logic.Infrastructure;
 using MTCG.Logic.Infrastructure.Repositories;
 using MTCG.Logic.Infrastructure.Repositories.MockUps;
 using System;
@@ -42,6 +43,8 @@ namespace MonsterTradingCardGame_Hoechtl
 
             builder.RegisterTypes(
                 typeof(PackageFactory),
+                typeof(BattleLauncher),
+                typeof(BattleQueue),
                 typeof(SessionService),
                 typeof(HandlerMethodResolver),
                 typeof(Random),

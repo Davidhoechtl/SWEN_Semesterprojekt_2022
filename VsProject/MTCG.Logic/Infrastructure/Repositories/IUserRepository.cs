@@ -5,7 +5,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 {
     public interface IUserRepository
     {
-        bool RegisterUser( string username, string password, IQueryDatabase database);
+        bool RegisterUser( string username, string password,  int coins, IUnitOfWork database);
         bool UpdateUser(User user, IUnitOfWork database);
         User GetUserByUsername(string username, IQueryDatabase database);
         User GetUserById(int userId, IQueryDatabase database);

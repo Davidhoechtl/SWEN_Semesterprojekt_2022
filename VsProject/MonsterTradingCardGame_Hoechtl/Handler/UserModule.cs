@@ -10,6 +10,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
 {
     internal class UserModule : IHandler
     {
+        public const int StartCoins = 100;
         public string ModuleName => "Users";
 
         public UserModule(
@@ -34,12 +35,20 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             }
 
             // encrpyt passwort hier
-            bool success = userRepository.RegisterUser(userCredentials.UserName, userCredentials.Password, queryDatabase);
-            if (!success)
+            bool success;
+            using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateAndBeginTransaction())
             {
-                return new HttpResponse(400, $"Fehler beim Speichern des Users {userCredentials.UserName}.", string.Empty);
+                success = userRepository.RegisterUser(userCredentials.UserName, userCredentials.Password, StartCoins, unitOfWork);
+                if (success)
+                {
+                    unitOfWork.Commit();
+                    return HttpResponse.GetSuccessResponse();
+                }
+                else
+                {
+                    return new HttpResponse(400, $"Fehler beim Speichern des Users {userCredentials.UserName}.", string.Empty);
+                }
             }
-            return new HttpResponse(201, "Ok", string.Empty);
         }
 
         [Post]
@@ -96,7 +105,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                         success = userRepository.UpdateUser(user, unitOfWork);
                         unitOfWork.Commit();
                     }
-                   
+
                     if (success)
                     {
                         User updatedUser = userRepository.GetUserById(user.Id, queryDatabase);

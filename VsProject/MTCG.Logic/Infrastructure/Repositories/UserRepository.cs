@@ -53,17 +53,29 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return user;
         }
 
-        public bool RegisterUser(string username, string password, IQueryDatabase database)
+        public bool RegisterUser(string username, string password, int coins, IUnitOfWork database)
         {
-            string sqlStatement = "INSERT INTO Users (username, password) VALUES (@username, @password)";
+            string sqlStatement = "INSERT INTO Users (username, password, coins) VALUES (@username, @password, @coins) RETURNING user_id";
 
-            int affectedRows = database.ExecuteNonQuery(
+            int? user_id = database.InsertAndGetLastIdentity(
                 sqlStatement,
                 new NpgsqlParameter("username", username),
-                new NpgsqlParameter("password", password)
+                new NpgsqlParameter("password", password),
+                new NpgsqlParameter("coins", coins)
             );
 
-            return affectedRows != 0;
+            if (user_id.HasValue)
+            {
+                sqlStatement = "INSERT INTO decks (user_id) VALUES (@userId)";
+                int affectedRows = database.ExecuteNonQuery(
+                    sqlStatement,
+                    new NpgsqlParameter("userId", user_id.Value)
+                );
+
+                return affectedRows != 0;
+            }
+
+            return false;
         }
 
         public bool UpdateUser(User user, IUnitOfWork database)

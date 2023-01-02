@@ -36,23 +36,26 @@ namespace MonsterTradingCardGame_Hoechtl
 
                 requestCount++;
 
-                // reader.close would lead also to writer.close
-                StreamReader reader = new StreamReader(client.GetStream());
-                StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = false };
-
-                HttpRequest request = new HttpRequest(reader);
-                Console.WriteLine(request);
-
-                string handlerName = GetHandlerNameFromRequest(request);
-                IHandler handler = GetHandlerByName(handlerName);
-
-                HttpResponse response = HttpResponse.GetNotFoundResponse();
-                if (handler != null)
+                Task.Run(() =>
                 {
-                    response = handlerMethodResolver.InvokeHandlerMethod(handler, request.Method, request.PathData, request.Content, request.AuthenticationToken);
-                }
+                    // reader.close would lead also to writer.close
+                    StreamReader reader = new StreamReader(client.GetStream());
+                    StreamWriter writer = new StreamWriter(client.GetStream()) { AutoFlush = false };
 
-                response.SendOn(writer);
+                    HttpRequest request = new HttpRequest(reader);
+                    Console.WriteLine(request);
+
+                    string handlerName = GetHandlerNameFromRequest(request);
+                    IHandler handler = GetHandlerByName(handlerName);
+
+                    HttpResponse response = HttpResponse.GetNotFoundResponse();
+                    if (handler != null)
+                    {
+                        response = handlerMethodResolver.InvokeHandlerMethod(handler, request.Method, request.PathData, request.Content, request.AuthenticationToken);
+                    }
+
+                    response.SendOn(writer);
+                });
             }
         }
 

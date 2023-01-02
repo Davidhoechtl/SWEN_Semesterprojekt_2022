@@ -42,7 +42,7 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
             throw new NotImplementedException();
         }
 
-        public bool RegisterUser(string username, string password, IQueryDatabase database)
+        public bool RegisterUser(string username, string password, int coins, IUnitOfWork database)
         {
             return true;
         }
