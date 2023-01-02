@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS public.cards
     damage real NOT NULL,
     card_type "char" NOT NULL,
     element_type "char" NOT NULL,
+    category_id text NOT NULL,
     PRIMARY KEY (card_id)
 );
 
@@ -80,6 +81,42 @@ CREATE TABLE IF NOT EXISTS public.decks_cards
 COMMENT ON TABLE public.decks_cards
     IS 'Map cards to a deck';
 
+CREATE TABLE IF NOT EXISTS public.card_category
+(
+    category_id text NOT NULL,
+    PRIMARY KEY (category_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.users_stats
+(
+    stats_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+    user_id integer NOT NULL,
+    coins_spent integer NOT NULL,
+    battles_played integer NOT NULL,
+    wins integer NOT NULL,
+    win_rate real NOT NULL,
+    CONSTRAINT "Pk_users_stats" PRIMARY KEY (stats_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.trade_offers
+(
+    trade_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+    offered_card_id integer NOT NULL,
+    type_requirement "char",
+    damage_requirement real,
+    category_requirement text,
+    active boolean NOT NULL,
+    PRIMARY KEY (trade_id)
+);
+
+ALTER TABLE IF EXISTS public.cards
+    ADD FOREIGN KEY (category_id)
+    REFERENCES public.card_category (category_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
 ALTER TABLE IF EXISTS public.users_cards
     ADD FOREIGN KEY (card_id)
     REFERENCES public.cards (card_id) MATCH SIMPLE
@@ -130,6 +167,22 @@ ALTER TABLE IF EXISTS public.decks_cards
 
 ALTER TABLE IF EXISTS public.decks_cards
     ADD FOREIGN KEY (card_id)
+    REFERENCES public.cards (card_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.users_stats
+    ADD FOREIGN KEY (user_id)
+    REFERENCES public.users (user_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.trade_offers
+    ADD FOREIGN KEY (offered_card_id)
     REFERENCES public.cards (card_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
