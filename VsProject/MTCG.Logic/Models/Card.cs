@@ -1,7 +1,7 @@
 ﻿
 namespace MTCG.Models
 {
-    public abstract class Card
+    public abstract class Card : ICloneable, IEquatable<Card>
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -36,6 +36,10 @@ namespace MTCG.Models
                 return null;
             }
         }
+
+        public abstract object Clone();
+
+        public abstract bool Equals(Card other);
 
         private double GetDamageMulitplier(ElementTyp attack, ElementTyp defend)
         {

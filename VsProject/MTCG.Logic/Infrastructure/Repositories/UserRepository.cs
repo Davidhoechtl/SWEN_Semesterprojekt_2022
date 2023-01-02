@@ -28,7 +28,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             if(user != null)
             {
-                user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
+                user.Cards = cardRepository.GetUserCards(user.Id, database).ToList();
                 user.Deck = deckRepository.GetUsersDeck(user.Id, database);
             }
 
@@ -46,7 +46,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             if (user != null)
             {
-                user.Stack = cardRepository.GetUserCards(user.Id, database).ToList();
+                user.Cards = cardRepository.GetUserCards(user.Id, database).ToList();
                 user.Deck = deckRepository.GetUsersDeck(user.Id, database);
             }
 
@@ -164,7 +164,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             );
 
             string insertStatement = "INSERT INTO users_cards (user_id, card_id, count) VALUES (@userId, @cardId, @count)";
-            IEnumerable<IGrouping<int, Card>> cards = user.Stack.GroupBy(x => x.Id);
+            IEnumerable<IGrouping<int, Card>> cards = user.Cards.GroupBy(x => x.Id);
             foreach(IGrouping<int, Card> pair in cards)
             {
                 int insertDeltaRow = database.ExecuteNonQuery(

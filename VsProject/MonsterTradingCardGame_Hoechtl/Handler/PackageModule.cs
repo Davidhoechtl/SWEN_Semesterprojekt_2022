@@ -81,7 +81,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                 return new HttpResponse(403, "User doesn´t have enough coins.");
             }
 
-            user.Stack.AddRange(package.CardIds);
+            user.Cards.AddRange(package.CardIds);
             user.Coins -= package.Price;
             package.Active = false;
 

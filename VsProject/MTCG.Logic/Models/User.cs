@@ -9,7 +9,7 @@ namespace MTCG.Models
     {
         public int Id { get; set; }
         public UserCredentials Credentials { get; set; }
-        public List<Card> Stack { get; set; } = new();
+        public List<Card> Cards { get; set; } = new();
         public Deck Deck { get; set; }
         public int Coins { get; set; }
 

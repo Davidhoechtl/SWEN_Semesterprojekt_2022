@@ -61,7 +61,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
 
             foreach(int cardId in deckCards)
             {
-                Card card = user.Stack.FirstOrDefault(c => c.Id == cardId);
+                Card card = user.Cards.FirstOrDefault(c => c.Id == cardId);
                 if(card == null)
                 {
                     return new HttpResponse(403, "At least one of the provided cards does not belong to the user or is not available.");

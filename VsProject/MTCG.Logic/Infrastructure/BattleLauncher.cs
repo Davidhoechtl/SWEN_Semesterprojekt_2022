@@ -1,5 +1,6 @@
 ﻿using MTCG.Logic.Models;
 using MTCG.Models;
+using System.Text;
 
 namespace MTCG.Logic.Infrastructure
 {
@@ -12,15 +13,17 @@ namespace MTCG.Logic.Infrastructure
             this.rnd = rnd;
         }
 
-        public BattleResult Launch(User player1, User player2)
+        public (BattleResult result, string protocol) Launch(User player1, User player2)
         {
             bool validBattleConfiguration = ValidateBattle(player1, player2);
             if (!validBattleConfiguration)
             {
-                return BattleResult.Invalid;
+                return (BattleResult.Invalid, string.Empty);
             }
 
             int roundCount = 1;
+            StringBuilder battleProtocol = new();
+            battleProtocol.AppendLine($"{player1.Credentials.UserName} battles against {player2.Credentials.UserName}");
             while (player1.Deck.Cards.Count > 0 && player2.Deck.Cards.Count > 0 && roundCount < 100)
             {
                 Shuffle(player1.Deck.Cards);
@@ -28,7 +31,9 @@ namespace MTCG.Logic.Infrastructure
                 Card player1Card = player1.Deck.Cards.Pop();
                 Card player2Card = player2.Deck.Cards.Pop();
 
+                battleProtocol.Append($"{roundCount}: {player1Card.Name} ({player1Card.Damage}) battles against {player2Card.Name} ({player2Card.Damage})");
                 Card winnersCard = player1Card.BattleAgainst(player2Card);
+                battleProtocol.AppendLine($" -> {winnersCard?.Name ?? "draw"}");
 
                 if (player1Card == winnersCard)
                 {
@@ -52,15 +57,18 @@ namespace MTCG.Logic.Infrastructure
 
             if (player1.Deck.Cards.Count == 0)
             {
-                return BattleResult.Lose;
+                battleProtocol.AppendLine($"{player2.Credentials.UserName} won the battle");
+                return (BattleResult.Lose, battleProtocol.ToString());
             }
             else if (player2.Deck.Cards.Count == 0)
             {
-                return BattleResult.Won;
+                battleProtocol.AppendLine($"{player1.Credentials.UserName} won the battle");
+                return (BattleResult.Won, battleProtocol.ToString());
             }
             else
             {
-                return BattleResult.Draw;
+                battleProtocol.AppendLine($"Battle ended in a draw");
+                return (BattleResult.Draw, battleProtocol.ToString());
             }
         }
 
