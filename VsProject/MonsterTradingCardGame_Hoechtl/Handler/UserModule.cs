@@ -77,7 +77,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                 return new HttpResponse(404, "User not found.");
             }
 
-            if (sessionService.IsValidUsersOrAdminKey(context.SessionKey.Id, user.Id))
+            if (sessionService.IsValidUsersOrAdminKey(context.SessionKey?.Id, user.Id))
             {
                 string userData = JsonConvert.SerializeObject(user);
                 return new HttpResponse(200, "OK")

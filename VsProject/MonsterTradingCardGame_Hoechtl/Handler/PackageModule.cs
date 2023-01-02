@@ -83,6 +83,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
 
             user.Cards.AddRange(package.CardIds);
             user.Coins -= package.Price;
+            user.Statistic.CoinsSpent += package.Price;
             package.Active = false;
 
             using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateAndBeginTransaction())

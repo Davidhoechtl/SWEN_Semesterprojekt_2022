@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MTCG.Logic.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace MTCG.Models
         public List<Card> Cards { get; set; } = new();
         public Deck Deck { get; set; }
         public int Coins { get; set; }
+
+        public UserStatistic Statistic { get; set; }
 
         public Deck SelectDeck()
         {

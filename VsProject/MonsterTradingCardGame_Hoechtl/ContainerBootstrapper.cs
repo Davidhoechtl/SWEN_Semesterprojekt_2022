@@ -6,6 +6,7 @@ using MTCG.Infrastructure;
 using MTCG.Logic.Infrastructure;
 using MTCG.Logic.Infrastructure.Repositories;
 using MTCG.Logic.Infrastructure.Repositories.MockUps;
+using MTCG.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -43,6 +44,7 @@ namespace MonsterTradingCardGame_Hoechtl
 
             builder.RegisterTypes(
                 typeof(PackageFactory),
+                typeof(CardFactory),
                 typeof(BattleLauncher),
                 typeof(BattleQueue),
                 typeof(SessionService),
@@ -60,7 +62,8 @@ namespace MonsterTradingCardGame_Hoechtl
                 typeof(UserRepository),
                 typeof(PackageRepository),
                 typeof(CardRepository),
-                typeof(DeckRepository)
+                typeof(DeckRepository),
+                typeof(UserStatisticRepository)
             )
             .SingleInstance()
             .AsImplementedInterfaces();

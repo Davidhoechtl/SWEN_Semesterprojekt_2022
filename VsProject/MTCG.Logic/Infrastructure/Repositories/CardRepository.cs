@@ -8,6 +8,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
     public class CardRepository : ICardRepository
     {
+        public CardRepository(CardFactory cardFactory)
+        {
+            this.cardFactory = cardFactory;
+        }
+
         public Card GetCardById(int id, IQueryDatabase database)
         {
             string sqlStatement = "SELECT * FROM cards WHERE card_id = @cardId";
@@ -95,42 +100,12 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             if (reader.IsOnRow)
             {
-                char cardType = reader.GetChar(reader.GetOrdinal("card_type"));
-
-                if(cardType == 'M')
-                {
-                    card = new MonsterCard()
-                    {
-                        Id = reader.GetInt32(reader.GetOrdinal("card_id")),
-                        Name = reader.GetString(reader.GetOrdinal("name")),
-                        Damage = reader.GetDouble(reader.GetOrdinal("damage")),
-                        ElementTyp = ConvertCharToElementTyp(reader.GetChar(reader.GetOrdinal("element_type")))
-                    };
-                }
-                else
-                {
-                    card = new SpellCard()
-                    {
-                        Id = reader.GetInt32(reader.GetOrdinal("card_id")),
-                        Name = reader.GetString(reader.GetOrdinal("name")),
-                        Damage = reader.GetDouble(reader.GetOrdinal("damage")),
-                        ElementTyp = ConvertCharToElementTyp(reader.GetChar(reader.GetOrdinal("element_type")))
-                    };
-                }  
+                card = cardFactory.GetCardFromDataReader(reader);
             }
 
             return card;
         }
 
-        private ElementTyp ConvertCharToElementTyp(char type)
-        {
-            return type switch
-            {
-                'N' => ElementTyp.Normal,
-                'F' => ElementTyp.Fire,
-                'W' => ElementTyp.Water,
-                _ => throw new Exception($"Unrecognized Elementype {type}")
-            };
-        }
+        private readonly CardFactory cardFactory;
     }
 }

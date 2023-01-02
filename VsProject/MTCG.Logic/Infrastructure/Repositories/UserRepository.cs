@@ -7,10 +7,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
     public class UserRepository : IUserRepository
     {
-        public UserRepository( ICardRepository cardRepository, IDeckRepository deckRepository)
+        public UserRepository( ICardRepository cardRepository, IDeckRepository deckRepository, IUserStatisticRepository statisticRepository)
         {
             this.cardRepository = cardRepository;
             this.deckRepository = deckRepository;
+            this.statisticRepository = statisticRepository;
         }
 
         public User GetUserByUsername(string username, IQueryDatabase database)
@@ -30,6 +31,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             {
                 user.Cards = cardRepository.GetUserCards(user.Id, database).ToList();
                 user.Deck = deckRepository.GetUsersDeck(user.Id, database);
+                user.Statistic = statisticRepository.GetStatisticByUserId(user.Id, database);
             }
 
             return user;
@@ -48,6 +50,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
             {
                 user.Cards = cardRepository.GetUserCards(user.Id, database).ToList();
                 user.Deck = deckRepository.GetUsersDeck(user.Id, database);
+                user.Statistic = statisticRepository.GetStatisticByUserId(user.Id, database);
             }
 
             return user;
@@ -72,7 +75,13 @@ namespace MTCG.Logic.Infrastructure.Repositories
                     new NpgsqlParameter("userId", user_id.Value)
                 );
 
-                return affectedRows != 0;
+                sqlStatement = "INSERT INTO users_stats (user_Id, coins_spent, battles_played, wins, win_rate) VALUES (@userId, 0, 0, 0, 0)";
+                int affectedRows2 = database.ExecuteNonQuery(
+                    sqlStatement,
+                    new NpgsqlParameter("userId", user_id.Value)
+                );
+
+                return affectedRows != 0 && affectedRows2 != 0;
             }
 
             return false;
@@ -91,6 +100,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             UpdatedUserCards(user, database);
             deckRepository.UpdateUsersDeck(user.Deck, database);
+            statisticRepository.UpdateUserStatistic(user.Statistic, database);
 
             return affectedRows != 0;
         }
@@ -180,5 +190,6 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
         private readonly ICardRepository cardRepository;
         private readonly IDeckRepository deckRepository;
+        private readonly IUserStatisticRepository statisticRepository;
     }
 }

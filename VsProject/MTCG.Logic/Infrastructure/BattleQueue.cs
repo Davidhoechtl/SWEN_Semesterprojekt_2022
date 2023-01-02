@@ -58,11 +58,13 @@ namespace MTCG.Logic.Infrastructure
                             // player 2 louses his cards
                             user2.User.Deck.Cards.Clear();
                             user2.User.Cards.RemoveRange(user2Deck.Cards);
+                            user2.User.Statistic.BattlesPlayed += 1;
 
                             // player 1 gains cards
                             user1.User.Deck = user1Deck;
                             user1.User.Cards.AddRange(user2Deck.Cards);
-                            
+                            user1.User.Statistic.BattlesPlayed += 1;
+                            user1.User.Statistic.Wins += 1;
                             UpdateDatabase(user1.User, user2.User);
                             
                             user1.BattleProtocol = new BattleProtocol(result.state, result.protocol);
@@ -73,11 +75,14 @@ namespace MTCG.Logic.Infrastructure
                             // player 1 louses his cards
                             user1.User.Deck.Cards.Clear();
                             user1.User.Cards.RemoveRange(user1Deck.Cards);
+                            user1.User.Statistic.BattlesPlayed += 1;
 
                             // player 2 gains cards
                             user2.User.Deck = user2Deck;
                             user2.User.Cards.AddRange(user1Deck.Cards);
-                            
+                            user2.User.Statistic.BattlesPlayed += 1;
+                            user2.User.Statistic.Wins += 1;
+
                             UpdateDatabase(user1.User, user2.User);
 
                             user1.BattleProtocol = new BattleProtocol(result.state, result.protocol);
