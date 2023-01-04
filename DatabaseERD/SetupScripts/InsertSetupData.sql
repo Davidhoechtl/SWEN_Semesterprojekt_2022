@@ -1,10 +1,10 @@
 INSERT INTO users (username, password, coins) VALUES ('admin', 'admin', 10000);
 INSERT INTO decks (user_Id) VALUES (1);
-INSERT INTO users_stats (user_Id, coins_spent, battles_played, wins, win_rate) VALUES (1, 0, 0, 0, 0);
+INSERT INTO users_stats (user_Id, username, coins_spent, battles_played, wins, win_rate) VALUES (1, 'admin', 0, 0, 0, 0);
 
 INSERT INTO users (username, password, coins) VALUES ('Test', 'Test', 500);
 INSERT INTO decks (user_Id) VALUES (2);
-INSERT INTO users_stats (user_Id, coins_spent, battles_played, wins, win_rate) VALUES (2, 0, 0, 0, 0);
+INSERT INTO users_stats (user_Id, username, coins_spent, battles_played, wins, win_rate) VALUES (2, 'Test', 0, 0, 0, 0);
 
 INSERT INTO card_category (category_id) VALUES ('Goblin');
 INSERT INTO card_category (category_id) VALUES ('Dragon');

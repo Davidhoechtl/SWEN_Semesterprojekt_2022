@@ -18,11 +18,11 @@ COMMENT ON TABLE public.users
 CREATE TABLE IF NOT EXISTS public.cards
 (
     card_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+    category_id text NOT NULL,
     name text NOT NULL,
     damage real NOT NULL,
     card_type "char" NOT NULL,
     element_type "char" NOT NULL,
-    category_id text NOT NULL,
     PRIMARY KEY (card_id)
 );
 
@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS public.users_stats
 (
     stats_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     user_id integer NOT NULL,
+    username text NOT NULL,
     coins_spent integer NOT NULL,
     battles_played integer NOT NULL,
     wins integer NOT NULL,

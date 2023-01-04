@@ -77,7 +77,8 @@ namespace MonsterTradingCardGame_Hoechtl
                 typeof(UserModule),
                 typeof(PackageModule),
                 typeof(DeckModule),
-                typeof(CardModule)
+                typeof(CardModule),
+                typeof(StatsModule)
             )
             .SingleInstance()
             .AsImplementedInterfaces();
