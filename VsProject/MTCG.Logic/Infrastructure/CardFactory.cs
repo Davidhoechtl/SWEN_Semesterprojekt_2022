@@ -10,9 +10,11 @@ namespace MTCG.Logic.Infrastructure
 
     public class CardFactory
     {
+        public IEnumerable<Type> CardTypes { get; init; }
+
         public CardFactory()
         {
-            cardTypes = GetAllCardTypes();
+            CardTypes = GetAllCardTypes();
         }
 
         public Card GetCardFromDataReader(NpgsqlDataReader reader)
@@ -34,19 +36,7 @@ namespace MTCG.Logic.Infrastructure
             return instance;
         }
 
-        private IEnumerable<Type> GetAllCardTypes()
-        {
-            Assembly current = Assembly.GetExecutingAssembly();
-            return current.GetTypes().Where(type => type.IsAssignableTo(typeof(Card)) && !type.IsAbstract);
-        }
-
-        private Card GetCardInstanceFromCategory(string category)
-        {
-            Type type = cardTypes.FirstOrDefault(type => type.Name == category);
-            return (Card)Activator.CreateInstance(type);
-        }
-
-        private ElementTyp ConvertCharToElementTyp(char type)
+        public ElementTyp ConvertCharToElementTyp(char type)
         {
             return type switch
             {
@@ -57,7 +47,16 @@ namespace MTCG.Logic.Infrastructure
             };
         }
 
+        private IEnumerable<Type> GetAllCardTypes()
+        {
+            Assembly current = Assembly.GetExecutingAssembly();
+            return current.GetTypes().Where(type => type.IsAssignableTo(typeof(Card)) && !type.IsAbstract);
+        }
 
-        private IEnumerable<Type> cardTypes;
+        private Card GetCardInstanceFromCategory(string category)
+        {
+            Type type = CardTypes.FirstOrDefault(type => type.Name == category);
+            return (Card)Activator.CreateInstance(type);
+        }
     }
 }

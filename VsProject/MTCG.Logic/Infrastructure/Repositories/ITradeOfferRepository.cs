@@ -9,8 +9,9 @@ namespace MTCG.Logic.Infrastructure.Repositories
 {
     public interface ITradeOfferRepository
     {
-        void SaveTradeOffer(TradingOffer tradeOffer);
-        TradingOffer GetTradeOfferBySeller(string sellerUserName);
+        bool InsertTradeOffer(TradingOffer tradeOffer);
+        bool UpdateTradeOffer(TradingOffer tradeOffer);
+        TradingOffer GetTradeOfferBySellerId(int sellerId);
         IEnumerable<TradingOffer> GetAllTradeOffers();
     }
 }

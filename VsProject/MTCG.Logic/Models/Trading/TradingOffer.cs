@@ -1,34 +1,43 @@
 ﻿using MTCG.Models;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MTCG.Logic.Models.Trading
 {
     public class TradingOffer
     {
-        public string Id { get; private set; }
+        public int Id { get; private set; }
         public Card Card { get; private set; }
         public List<TradeRequirement> TradeRequirements { get; private set; } = new();
-        public string SellerUserName { get; private set; }
-        public string BuyerUserName { get; set; }
+        public int SellerId { get; private set; }
+        public int? BuyerId { get; set; }
         public bool Active { get; private set; }
 
-        public TradingOffer(string sellerUserName, Card card, List<TradeRequirement> tradeRequirements, bool active)
-            : this(null, sellerUserName, card, tradeRequirements, active)
+        public TradingOffer(int sellerId, Card card, List<TradeRequirement> tradeRequirements, bool active)
+            : this(0, sellerId, null, card, tradeRequirements, active)
         {
         }
 
-        public TradingOffer(string id, string sellerUserName, Card card, List<TradeRequirement> tradeRequirements, bool active)
+        public TradingOffer(int id, int sellerId, int? buyerId, Card card, List<TradeRequirement> tradeRequirements, bool active)
         {
             this.Id = id;
-            this.SellerUserName = sellerUserName;
+            this.SellerId = sellerId;
+            this.BuyerId = buyerId;
             this.Card = card;
             this.TradeRequirements = tradeRequirements;
             this.Active = active;
+        }
+
+        public T GetTradRequirement<T>() 
+            where T : TradeRequirement
+        {
+            foreach(TradeRequirement requirement in this.TradeRequirements)
+            {
+                if( requirement is T)
+                {
+                    return (T)requirement;
+                }
+            }
+
+            return null;
         }
     }
 }

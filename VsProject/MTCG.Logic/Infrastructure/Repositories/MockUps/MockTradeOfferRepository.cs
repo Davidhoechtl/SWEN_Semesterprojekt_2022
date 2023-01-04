@@ -40,7 +40,7 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
                     new CardTypRequirement<SpellCard>()
                 },
                 false
-            ) { BuyerUserName = "TestUser" },
+            ) { BuyerId = "TestUser" },
         };
 
         public IEnumerable<TradingOffer> GetAllTradeOffers()
@@ -51,11 +51,11 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
         public TradingOffer GetTradeOfferBySeller(string sellerUserName)
         {
             return offers
-                .FirstOrDefault(o => o.SellerUserName.Equals(sellerUserName, StringComparison.Ordinal)
+                .FirstOrDefault(o => o.SellerId.Equals(sellerUserName, StringComparison.Ordinal)
             );
         }
 
-        public void SaveTradeOffer(TradingOffer tradeOffer)
+        public void InsertTradeOffer(TradingOffer tradeOffer)
         {
             throw new NotImplementedException();
         }

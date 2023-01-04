@@ -19,13 +19,13 @@ namespace MTCG.Logic.Infrastructure
         public void SaveTradeOffer(User user, Card card, params TradeRequirement[] requirements)
         {
             TradingOffer offer = new TradingOffer(
-                user.Credentials.UserName, 
+                user.Id, 
                 card, 
                 requirements.ToList(), 
                 true
             );
 
-            tradeOfferRepository.SaveTradeOffer(offer);
+            tradeOfferRepository.InsertTradeOffer(offer);
         }
 
         private readonly ITradeOfferRepository tradeOfferRepository;
