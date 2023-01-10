@@ -13,7 +13,7 @@ namespace MTCG.DAL
         
         public void Load()
         {
-            IDbConnection dbConnection = new NpgsqlConnection("Host=localhost;Username=postgres;Password=dividi1212;Database=MonsterCardTradingGame");
+            IDbConnection dbConnection = new NpgsqlConnection("Host=localhost;Username=postgres;Password=test;Database=MonsterCardTradingGame");
             builder.RegisterInstance(dbConnection);
 
             builder.RegisterTypes(

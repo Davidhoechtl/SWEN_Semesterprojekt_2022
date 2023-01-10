@@ -10,7 +10,7 @@ namespace MTCG.Logic.Models.Trading
         {
             this.MinimumDamage = minimumDamage;
         }
-        protected override bool MeetsRequirement(Card card)
+        public override bool MeetsRequirement(Card card)
         {
             return card.Damage >= MinimumDamage;
         }

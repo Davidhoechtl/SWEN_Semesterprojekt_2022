@@ -1,4 +1,5 @@
-﻿using MTCG.Logic.Models.Trading;
+﻿using MTCG.DAL;
+using MTCG.Logic.Models.Trading;
 using MTCG.Models;
 
 namespace MTCG.Logic.Infrastructure.Repositories.MockUps
@@ -8,8 +9,7 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
         private static readonly IEnumerable<TradingOffer> offers = new List<TradingOffer>()
         {
             new TradingOffer(
-                "Offer1",
-                "TestUser",
+                1,
                 new MonsterCard()
                 {
                     Name = "Wolve",
@@ -25,8 +25,7 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
                 true
             ),
             new TradingOffer(
-                "Offer2",
-                "TestUser2",
+                1,
                 new MonsterCard()
                 {
                     Name = "Blob",
@@ -40,7 +39,7 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
                     new CardTypRequirement<SpellCard>()
                 },
                 false
-            ) { BuyerId = "TestUser" },
+            ) { BuyerId = 1},
         };
 
         public IEnumerable<TradingOffer> GetAllTradeOffers()
@@ -48,14 +47,40 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
             return offers;
         }
 
+        public IEnumerable<TradingOffer> GetAllTradeOffers(IQueryDatabase queryDatabase)
+        {
+            throw new NotImplementedException();
+        }
+
         public TradingOffer GetTradeOfferBySeller(string sellerUserName)
         {
-            return offers
-                .FirstOrDefault(o => o.SellerId.Equals(sellerUserName, StringComparison.Ordinal)
-            );
+            //return offers
+            //    .FirstOrDefault(o => o.SellerId.Equals(sellerUserName, StringComparison.Ordinal)
+            //);
+            throw new NotImplementedException();
+        }
+
+        public List<TradingOffer> GetTradeOffersBySellerId(int sellerId, IQueryDatabase queryDatabase)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TradingOffer GetTradingOfferById(int tradeId, IQueryDatabase queryDatabase)
+        {
+            throw new NotImplementedException();
         }
 
         public void InsertTradeOffer(TradingOffer tradeOffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool InsertTradeOffer(TradingOffer tradeOffer, IQueryDatabase queryDatabase)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateTradeOffer(TradingOffer tradeOffer, IQueryDatabase queryDatabase)
         {
             throw new NotImplementedException();
         }

@@ -11,7 +11,7 @@ namespace MTCG.Logic.Models.Trading
             CardType = type;
         }
 
-        protected override bool MeetsRequirement(Card card)
+        public override bool MeetsRequirement(Card card)
         {
             return card.GetType() == CardType;
         }

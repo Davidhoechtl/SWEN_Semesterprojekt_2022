@@ -15,7 +15,7 @@ namespace MTCG.Logic.Models.Trading
             this.ElementTyp = elementTyp;
         }
 
-        protected override bool MeetsRequirement(Card card)
+        public override bool MeetsRequirement(Card card)
         {
             return card.ElementTyp == ElementTyp;
         }

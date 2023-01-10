@@ -45,6 +45,7 @@ namespace MonsterTradingCardGame_Hoechtl
             builder.RegisterTypes(
                 typeof(PackageFactory),
                 typeof(CardFactory),
+                typeof(TradeLauncher),
                 typeof(BattleLauncher),
                 typeof(BattleQueue),
                 typeof(SessionService),
@@ -63,7 +64,8 @@ namespace MonsterTradingCardGame_Hoechtl
                 typeof(PackageRepository),
                 typeof(CardRepository),
                 typeof(DeckRepository),
-                typeof(UserStatisticRepository)
+                typeof(UserStatisticRepository),
+                typeof(TradeOfferRepository)
             )
             .SingleInstance()
             .AsImplementedInterfaces();
