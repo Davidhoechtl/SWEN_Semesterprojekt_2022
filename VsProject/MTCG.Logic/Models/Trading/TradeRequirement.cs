@@ -9,6 +9,6 @@ namespace MTCG.Logic.Models.Trading
 {
     public abstract class TradeRequirement
     {
-        protected abstract bool MeetsRequirement(Card card);
+        public abstract bool MeetsRequirement(Card card);
     }
 }

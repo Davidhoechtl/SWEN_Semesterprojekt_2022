@@ -1,17 +1,14 @@
-﻿using MTCG.Logic.Models.Trading;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MTCG.DAL;
+using MTCG.Logic.Models.Trading;
 
 namespace MTCG.Logic.Infrastructure.Repositories
 {
     public interface ITradeOfferRepository
     {
-        bool InsertTradeOffer(TradingOffer tradeOffer);
-        bool UpdateTradeOffer(TradingOffer tradeOffer);
-        TradingOffer GetTradeOfferBySellerId(int sellerId);
-        IEnumerable<TradingOffer> GetAllTradeOffers();
+        bool InsertTradeOffer(TradingOffer tradeOffer, IQueryDatabase queryDatabase);
+        bool UpdateTradeOffer(TradingOffer tradeOffer, IQueryDatabase queryDatabase);
+        List<TradingOffer> GetTradeOffersBySellerId(int sellerId, IQueryDatabase queryDatabase);
+        IEnumerable<TradingOffer> GetAllTradeOffers(IQueryDatabase queryDatabase);
+        TradingOffer GetTradingOfferById(int tradeId, IQueryDatabase queryDatabase);
     }
 }

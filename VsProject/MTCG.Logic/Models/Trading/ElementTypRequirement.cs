@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MTCG.Logic.Models.Trading
 {
-    internal class ElementTypRequirement : TradeRequirement
+    public class ElementTypRequirement : TradeRequirement
     {
         public ElementTyp ElementTyp { get; init; }
         public ElementTypRequirement(ElementTyp elementTyp)

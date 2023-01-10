@@ -9,7 +9,7 @@ namespace MTCG.Logic.Models.Trading
         public List<TradeRequirement> TradeRequirements { get; private set; } = new();
         public int SellerId { get; private set; }
         public int? BuyerId { get; set; }
-        public bool Active { get; private set; }
+        public bool Active { get; set; }
 
         public TradingOffer(int sellerId, Card card, List<TradeRequirement> tradeRequirements, bool active)
             : this(0, sellerId, null, card, tradeRequirements, active)

@@ -21,14 +21,14 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             IUserRepository userRepository,
             ITradeOfferRepository tradeOfferRepository,
             IQueryDatabase queryDatabase,
-            UnitOfWorkFactory unitOfWorkFactory,
-            CardFactory cardFactory)
+            CardFactory cardFactory,
+            TradeLauncher tradeLauncher)
         {
             this.userRepository = userRepository;
             this.tradeOfferRepository = tradeOfferRepository;
             this.queryDatabase = queryDatabase;
-            this.unitOfWorkFactory = unitOfWorkFactory;
             this.cardFactory = cardFactory;
+            this.tradeLauncher = tradeLauncher;
         }
 
         [Post]
@@ -40,25 +40,70 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             }
 
             User user = userRepository.GetUserById(context.UserId.Value, queryDatabase);
-            if (!user.Cards.Any(card => card.Id == tradeOfferContext.CardId))
+            Card offeredCard = user.Cards.FirstOrDefault(card => card.Id == tradeOfferContext.CardId);
+            if (offeredCard == null)
             {
                 // User does not have the card he wants to offer
                 return new HttpResponse(403, "The user does not have the card he wants to offer.");
             }
 
+            List<TradeRequirement> tradeRequirements = GetTradeRequirementsFromContext(tradeOfferContext);
+            TradingOffer offer = new TradingOffer(
+                sellerId: user.Id,
+                card: offeredCard,
+                tradeRequirements,
+                active: true
+            );
 
+            bool success = tradeLauncher.SaveTradeOffer(user, offeredCard, tradeRequirements.ToArray());
+            if (success)
+            {
+                return HttpResponse.GetSuccessResponse();
+            }
+            else
+            {
+                return HttpResponse.GetInternalServerErrorResponse();
+            }
+        }
+
+        [Post]
+        public HttpResponse BuyTradeOffer(SessionContext context, BuyTradeOfferContext buyContext)
+        {
+            if (!context.UserId.HasValue)
+            {
+                return HttpResponse.GetUnauthorizedResponse();
+            }
+
+            User user = userRepository.GetUserById(context.UserId.Value, queryDatabase);
+            Card providedCard = user.Cards.FirstOrDefault(card => card.Id == buyContext.CardId);
+            if (providedCard == null)
+            {
+                // User does not have the card he wants to offer
+                return new HttpResponse(403, "The user does not have the card he wants to provide.");
+            }
+
+            bool success = tradeLauncher.TryBuyTradeOffer(user, providedCard, buyContext.TradeId);
+            if (success)
+            {
+                return HttpResponse.GetSuccessResponse();
+            }
+            else
+            {
+                return HttpResponse.GetInternalServerErrorResponse();
+            }
         }
 
         private List<TradeRequirement> GetTradeRequirementsFromContext(InsertTradeOfferContext context)
         {
             List<TradeRequirement> tradeRequirements = new();
+
             if (context.CardTypeRequirement.HasValue)
             {
                 if (context.CardTypeRequirement == 'M')
                 {
                     tradeRequirements.Add(new CardTypRequirement<MonsterCard>());
                 }
-                else if(context.CardTypeRequirement == 'S')
+                else if (context.CardTypeRequirement == 'S')
                 {
                     tradeRequirements.Add(new CardTypRequirement<SpellCard>());
                 }
@@ -73,22 +118,25 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             }
             if (context.ElementRequirement.HasValue)
             {
-                char elementRequirement = reader.GetChar(reader.GetOrdinal("element_requirement"));
-                ElementTyp convertedElementType = cardFactory.ConvertCharToElementTyp(elementRequirement);
+                ElementTyp convertedElementType = cardFactory.ConvertCharToElementTyp(context.ElementRequirement.Value);
                 tradeRequirements.Add(new ElementTypRequirement(convertedElementType));
             }
-            if (!reader.IsDBNull(reader.GetOrdinal("category_requirement")))
+            if (!string.IsNullOrEmpty(context.CategoryRequirement))
             {
-                string categoryRequirement = reader.GetString(reader.GetOrdinal("category_requirement"));
-                Type convertedCardType = GetCardTypeByCategory(categoryRequirement);
-                tradeRequirements.Add(new CardCategoryRequirement(convertedCardType));
+                Type convertedCardType = cardFactory.CardTypes.First(type => type.Name == context.CategoryRequirement);
+                if (convertedCardType != null)
+                {
+                    tradeRequirements.Add(new CardCategoryRequirement(convertedCardType));
+                }
             }
+
+            return tradeRequirements;
         }
 
         private readonly IUserRepository userRepository;
         private readonly ITradeOfferRepository tradeOfferRepository;
         private readonly IQueryDatabase queryDatabase;
-        private readonly UnitOfWorkFactory unitOfWorkFactory;
         private readonly CardFactory cardFactory;
+        private readonly TradeLauncher tradeLauncher;
     }
 }

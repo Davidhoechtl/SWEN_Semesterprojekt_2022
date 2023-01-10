@@ -14,7 +14,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
         public IEnumerable<TradingOffer> GetAllTradeOffers(IQueryDatabase queryDatabase)
         {
-            string sqlStatement = 
+            string sqlStatement =
                 @"SELECT * 
                   FROM trade_offers
                   JOIN cards ON (trade_offers.offered_card_id = cards.card_id)";
@@ -25,29 +25,57 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 {
                     List<TradingOffer> offers = new();
 
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         offers.Add(ConvertTradingOfferFromDataReader(reader));
                     }
 
+                    reader.Close();
                     return offers;
                 }
             );
         }
 
-        public TradingOffer GetTradeOfferBySellerId(int sellerId, IQueryDatabase queryDatabase)
+        public List<TradingOffer> GetTradeOffersBySellerId(int sellerId, IQueryDatabase queryDatabase)
         {
             string sqlStatement = "SELECT * FROM trade_offers WHERE seller_id = @sellerId";
+
+            return queryDatabase.GetItems(
+                sqlStatement,
+                reader =>
+                {
+                    List<TradingOffer> offers = new();
+
+                    while (reader.Read())
+                    {
+                        offers.Add(ConvertTradingOfferFromDataReader(reader));
+                    }
+
+                    reader.Close();
+                    return offers;
+                },
+                new NpgsqlParameter("sellerId", sellerId)
+            );
+        }
+
+        public TradingOffer GetTradingOfferById(int tradeId, IQueryDatabase queryDatabase)
+        {
+            string sqlStatement = "SELECT * FROM trade_offers WHERE trade_id = @tradeId";
 
             return queryDatabase.GetItem(
                 sqlStatement,
                 reader =>
                 {
-                    TradingOffer offer = ConvertTradingOfferFromDataReader(reader);
+                    TradingOffer offer = null;
+                    if (reader.IsOnRow)
+                    {
+                        offer = ConvertTradingOfferFromDataReader(reader);
+                    }
+
                     reader.Close();
                     return offer;
                 },
-                new NpgsqlParameter("sellerId", sellerId)
+                new NpgsqlParameter("tradeId", tradeId)
             );
         }
 
@@ -93,7 +121,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
         {
             TradingOffer offer = null;
 
-            if(reader.IsOnRow)
+            if (reader.IsOnRow)
             {
                 List<TradeRequirement> tradeRequirements = new();
                 if (!reader.IsDBNull(reader.GetOrdinal("type_requirement")))
@@ -140,7 +168,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
         private TradeRequirement GetCardTypeRequirementFromValue(char type)
         {
-            if(type == 'M')
+            if (type == 'M')
             {
                 return new CardTypRequirement<MonsterCard>();
             }
@@ -152,7 +180,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
         private char? GetCardTypeRequirementValue(TradingOffer offer)
         {
-            if(offer.GetTradRequirement<CardTypRequirement<MonsterCard>>() != null)
+            if (offer.GetTradRequirement<CardTypRequirement<MonsterCard>>() != null)
             {
                 return 'M';
             }
