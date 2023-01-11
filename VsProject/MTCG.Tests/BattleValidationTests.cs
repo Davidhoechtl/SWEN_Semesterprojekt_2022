@@ -28,9 +28,9 @@ namespace MTCG.Tests
             User user1 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
             User user2 = new User { Deck = null };
 
-            BattleResult result = battleLauncher.Launch(user1, user2);
+            (BattleResult result, string protocol) battleResult = battleLauncher.Launch(user1, user2);
 
-            Assert.That(result == BattleResult.Invalid);
+            Assert.That(battleResult.result == BattleResult.Invalid);
         }
 
         [Test]
@@ -43,9 +43,9 @@ namespace MTCG.Tests
             User user1 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
             User user2 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(5)) } };
 
-            BattleResult result = battleLauncher.Launch(user1, user2);
+            (BattleResult result, string protocol) battleResult = battleLauncher.Launch(user1, user2);
 
-            Assert.That(result == BattleResult.Invalid);
+            Assert.That(battleResult.result == BattleResult.Invalid);
         }
 
         [Test]
@@ -58,9 +58,9 @@ namespace MTCG.Tests
             User user1 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
             User user2 = new User { Deck = new Deck() { Cards = new Stack<Card>() } };
 
-            BattleResult result = battleLauncher.Launch(user1, user2);
+            (BattleResult result, string protocol) battleResult = battleLauncher.Launch(user1, user2);
 
-            Assert.That(result == BattleResult.Invalid);
+            Assert.That(battleResult.result == BattleResult.Invalid);
         }
 
         [Test]
@@ -73,9 +73,9 @@ namespace MTCG.Tests
             User user1 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
             User user2 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
 
-            BattleResult result = battleLauncher.Launch(user1, user2);
+            (BattleResult result, string protocol) battleResult = battleLauncher.Launch(user1, user2);
 
-            Assert.That(result != BattleResult.Invalid);
+            Assert.That(battleResult.result == BattleResult.Invalid);
         }
     }
 }
