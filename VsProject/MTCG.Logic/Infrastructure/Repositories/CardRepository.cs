@@ -30,7 +30,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
         public IEnumerable<Card> GetAllAvailableCards(IQueryDatabase database)
         {
-            string sqlStatement = "SELECT * from cards";
+            string sqlStatement = "SELECT * FROM cards";
 
             List<Card> cards = database.GetItems<Card>(
                 sqlStatement,

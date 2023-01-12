@@ -9,9 +9,10 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
 
     internal class HandlerMethodResolver
     {
-        public HandlerMethodResolver(SessionService sessionService)
+        public HandlerMethodResolver(SessionService sessionService, CardJsonConverter cardJsonConverter)
         {
             this.sessionService = sessionService;
+            this.cardJsonConverter = cardJsonConverter;
         }
 
         public HttpResponse InvokeHandlerMethod(IHandler handler, HttpMethod httpMethod, string[] pathData, string jsonContent, string sessionKey)
@@ -70,7 +71,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             else
             {
                 Type parameterType = firstParameter.ParameterType;
-                object parsedParameter = JsonConvert.DeserializeObject(jsonContent, parameterType);
+                object parsedParameter = JsonConvert.DeserializeObject(jsonContent, parameterType, cardJsonConverter);
                 return parsedParameter;
             }
         }
@@ -81,5 +82,6 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         private readonly SessionService sessionService;
+        private readonly CardJsonConverter cardJsonConverter;
     }
 }

@@ -50,6 +50,7 @@ namespace MonsterTradingCardGame_Hoechtl
                 typeof(BattleQueue),
                 typeof(SessionService),
                 typeof(HandlerMethodResolver),
+                typeof(CardJsonConverter),
                 typeof(Random),
                 typeof(Server)
             )

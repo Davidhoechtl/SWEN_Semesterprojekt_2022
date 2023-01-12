@@ -4,6 +4,7 @@ namespace MTCG.Models
     public abstract class Card : ICloneable, IEquatable<Card>
     {
         public int Id { get; set; }
+        public string Category { get; set; }
         public string Name { get; set; }
         public double Damage { get; set; }
 

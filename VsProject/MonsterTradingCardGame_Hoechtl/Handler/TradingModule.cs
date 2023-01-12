@@ -99,11 +99,11 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
 
             if (context.CardTypeRequirement.HasValue)
             {
-                if (context.CardTypeRequirement == 'M')
+                if (context.CardTypeRequirement.ToString().Equals("M", StringComparison.OrdinalIgnoreCase))
                 {
                     tradeRequirements.Add(new CardTypRequirement<MonsterCard>());
                 }
-                else if (context.CardTypeRequirement == 'S')
+                else if (context.CardTypeRequirement.ToString().Equals("S", StringComparison.OrdinalIgnoreCase))
                 {
                     tradeRequirements.Add(new CardTypRequirement<SpellCard>());
                 }

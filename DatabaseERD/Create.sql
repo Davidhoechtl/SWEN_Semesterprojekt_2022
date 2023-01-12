@@ -103,9 +103,12 @@ CREATE TABLE IF NOT EXISTS public.trade_offers
 (
     trade_id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     offered_card_id integer NOT NULL,
+    seller_id integer NOT NULL,
+    buyer_id integer,
     type_requirement "char",
     damage_requirement real,
     category_requirement text,
+    element_requirement "char",
     active boolean NOT NULL,
     PRIMARY KEY (trade_id)
 );
@@ -185,6 +188,22 @@ ALTER TABLE IF EXISTS public.users_stats
 ALTER TABLE IF EXISTS public.trade_offers
     ADD FOREIGN KEY (offered_card_id)
     REFERENCES public.cards (card_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.trade_offers
+    ADD FOREIGN KEY (seller_id)
+    REFERENCES public.users (user_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.trade_offers
+    ADD FOREIGN KEY (buyer_id)
+    REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;

@@ -38,7 +38,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
         public List<TradingOffer> GetTradeOffersBySellerId(int sellerId, IQueryDatabase queryDatabase)
         {
-            string sqlStatement = "SELECT * FROM trade_offers WHERE seller_id = @sellerId";
+            string sqlStatement = 
+                @"SELECT * 
+                  FROM trade_offers 
+                  JOIN cards ON (trade_offers.offered_card_id = cards.card_id) 
+                  WHERE seller_id = @sellerId";
 
             return queryDatabase.GetItems(
                 sqlStatement,
@@ -60,7 +64,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
         public TradingOffer GetTradingOfferById(int tradeId, IQueryDatabase queryDatabase)
         {
-            string sqlStatement = "SELECT * FROM trade_offers WHERE trade_id = @tradeId";
+            string sqlStatement = 
+                @"SELECT * 
+                  FROM trade_offers 
+                  JOIN cards ON (trade_offers.offered_card_id = cards.card_id)  
+                  WHERE trade_id = @tradeId";
 
             return queryDatabase.GetItem(
                 sqlStatement,
@@ -96,7 +104,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
                 new NpgsqlParameter("sellerId", tradeOffer.SellerId),
                 new NpgsqlParameter("typeRequirement", cardTypeRequirement),
                 new NpgsqlParameter("damageRequirement", damageRequirement),
-                new NpgsqlParameter("elementRequirement", elementRequirement),
+                new NpgsqlParameter("elementRequirement", cardFactory.ConvertElementTypeToChar(elementRequirement)),
                 new NpgsqlParameter("categoryRequirement", categoryRequirement),
                 new NpgsqlParameter("active", tradeOffer.Active)
             );
@@ -110,6 +118,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             int deltaRows = queryDatabase.ExecuteNonQuery(
                 sqlStatement,
+                new NpgsqlParameter("tradeId", tradeOffer.Id),
                 new NpgsqlParameter("buyerId", tradeOffer.BuyerId.Value),
                 new NpgsqlParameter("active", tradeOffer.Active)
             );

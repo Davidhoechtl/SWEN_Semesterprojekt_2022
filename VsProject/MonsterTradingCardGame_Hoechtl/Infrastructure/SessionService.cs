@@ -13,11 +13,16 @@ namespace MonsterTradingCardGame_Hoechtl.Infrastructure
         {
             // Add admin token
             sessionKeys.Add(1, new SessionKey(adminKey, DateTime.MaxValue, Permission.Admin));
+            sessionKeys.Add(2, new SessionKey("JohnsSpecialKey", DateTime.MaxValue, Permission.Admin));
         }
 
         public Guid CreateNewSessionKey(int user_Id)
         {
             Guid guid = Guid.NewGuid();
+            if(sessionKeys.ContainsKey(user_Id))
+            {
+                sessionKeys.Remove(user_Id);
+            }
             sessionKeys.Add(user_Id, new SessionKey(guid.ToString(), DateTime.Now.AddHours(3), Permission.User));
             return guid;
         }

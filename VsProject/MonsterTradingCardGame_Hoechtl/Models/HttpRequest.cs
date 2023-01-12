@@ -57,14 +57,26 @@ namespace MonsterTradingCardGame_Hoechtl.Models
                 var data = new StringBuilder(200);
                 char[] buffer = new char[1024];
                 int bytesReadTotal = 0;
+                int nextchunk = 0;
                 while (bytesReadTotal < contentLength)
                 {
                     try
                     {
-                        var bytesRead = reader.Read(buffer, 0, 1024);
+                        if ((contentLength - bytesReadTotal) < buffer.Length)
+                        {
+                            nextchunk = (contentLength - bytesReadTotal);
+
+                        }
+                        else
+                        {
+                            nextchunk = buffer.Length;
+                        }
+
+                        var bytesRead = reader.Read(buffer, 0, nextchunk);
+                        data.Append(buffer, 0, bytesRead);
                         bytesReadTotal += bytesRead;
                         if (bytesRead == 0) break;
-                        data.Append(buffer, 0, bytesRead);
+                        buffer = new char[1024];
                     }
 
                     catch (IOException ex)

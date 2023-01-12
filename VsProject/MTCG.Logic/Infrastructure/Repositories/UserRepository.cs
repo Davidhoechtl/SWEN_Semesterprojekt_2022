@@ -75,10 +75,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
                     new NpgsqlParameter("userId", user_id.Value)
                 );
 
-                sqlStatement = "INSERT INTO users_stats (user_Id, coins_spent, battles_played, wins, win_rate) VALUES (@userId, 0, 0, 0, 0)";
+                sqlStatement = "INSERT INTO users_stats (user_Id, username, coins_spent, battles_played, wins, win_rate) VALUES (@userId, @username, 0, 0, 0, 0)";
                 int affectedRows2 = database.ExecuteNonQuery(
                     sqlStatement,
-                    new NpgsqlParameter("userId", user_id.Value)
+                    new NpgsqlParameter("userId", user_id.Value),
+                    new NpgsqlParameter("username", username)
                 );
 
                 return affectedRows != 0 && affectedRows2 != 0;
