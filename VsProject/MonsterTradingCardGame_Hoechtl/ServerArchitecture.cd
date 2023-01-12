@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes.DeleteAttribute" Collapsed="true">
+    <Position X="11.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Handler\HttpAttributes\DeleteAttirbute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes.GetAttribute" Collapsed="true">
+    <Position X="13.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Handler\HttpAttributes\GetAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes.HttpAttribute" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Handler\HttpAttributes\HttpAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes.PostAttribute" Collapsed="true">
+    <Position X="15.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Handler\HttpAttributes\PostAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.HttpAttributes.PutAttribute" Collapsed="true">
+    <Position X="18" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Handler\HttpAttributes\PutAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.BattleModule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAiAAAAAAAAAAAAAAEAAAAAACAAAAAIAAAAA=</HashCode>
+      <FileName>Handler\BattleModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.CardModule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAIAACIAAAAAAAAAA=</HashCode>
+      <FileName>Handler\CardModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.DeckModule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AECAAAAAAAAAAAAAAAAIAACAEAAAAAACAAAAAIAAAAA=</HashCode>
+      <FileName>Handler\DeckModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.HandlerMethodResolver" Collapsed="true">
+    <Position X="13" Y="3.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAEAEAAAAAAAAAACAAAAAAAAAAAAI=</HashCode>
+      <FileName>Handler\HandlerMethodResolver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.PackageModule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACEAAAAIAAAAAACAAIBAAAAEAAAAAACAAAAAIAAAAA=</HashCode>
+      <FileName>Handler\PackageModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.StatsModule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAIAAAAAAAAAAgAAAEAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Handler\StatsModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.TradingModule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAEAAAAAAABAAQAEAAAAQACgAAAAJAAAAA=</HashCode>
+      <FileName>Handler\TradingModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Handler.UserModule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EACAAAAAAAAAAAAAAAAAAAAAEQAAAAACEAAAAIAAEAM=</HashCode>
+      <FileName>Handler\UserModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Infrastructure.CardJsonConverter" Collapsed="true">
+    <Position X="24" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQQAAAAAEAAAAAQAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Infrastructure\CardJsonConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Infrastructure.SessionService" Collapsed="true">
+    <Position X="20.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAACAAAACAEAAAAAAAAAAAABAAABAAAAAAAAAAIAAI=</HashCode>
+      <FileName>Infrastructure\SessionService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Models.HttpRequest" Collapsed="true">
+    <Position X="22.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAgAAAAAEAAEgAAAACAAEAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Models\HttpRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Models.HttpResponse" Collapsed="true">
+    <Position X="22.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAiAAAAAAAAAAAAIAAAAAABABIAARBAAAAAA=</HashCode>
+      <FileName>Models\HttpResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Models.Session" Collapsed="true">
+    <Position X="20.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAQAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Session.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Models.SessionContext" Collapsed="true">
+    <Position X="20.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SessionContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Models.SessionKey" Collapsed="true">
+    <Position X="20.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAQAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SessionKey.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.ContainerBootstrapper" Collapsed="true">
+    <Position X="20.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAIAAAAAAAAAAJgQAAAAAAAAAAAAA=</HashCode>
+      <FileName>ContainerBootstrapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Program" Collapsed="true">
+    <Position X="20.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonsterTradingCardGame_Hoechtl.Server" Collapsed="true">
+    <Position X="20.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAACAAAAAgAAAgAAAAAEIAAAgAAAAAAAgAAAA=</HashCode>
+      <FileName>Server.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="MonsterTradingCardGame_Hoechtl.Handler.IHandler" Collapsed="true">
+    <Position X="11.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Handler\IHandler.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="MonsterTradingCardGame_Hoechtl.Models.HttpMethod" Collapsed="true">
+    <Position X="17.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAEAQAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\HttpMethod.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MonsterTradingCardGame_Hoechtl.Models.Permission" Collapsed="true">
+    <Position X="17.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Models\Permission.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MonsterTradingCardGame_Hoechtl.Models.Role" Collapsed="true">
+    <Position X="17.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Models\Role.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

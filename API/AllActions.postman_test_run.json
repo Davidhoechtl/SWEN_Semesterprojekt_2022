@@ -1,0 +1,352 @@
+{
+	"id": "795f4143-c7c9-49c6-8308-9444246bd82d",
+	"name": "AllActions",
+	"timestamp": "2023-01-12T21:33:10.138Z",
+	"collection_id": "25132629-0bbe1c86-dddf-4215-ac3a-3372cb0b6597",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 0,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "32f75840-5b1e-468c-9e5a-f9a79dfd48a1",
+			"name": "CreateUser",
+			"url": "http://localhost:8000/Users/RegisterUser",
+			"time": 132,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				132
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "cc97ab76-eb4b-4ac3-a25d-6723ab1048c3",
+			"name": "LoginUser",
+			"url": "http://localhost:8000/Users/LoginUser",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "User login successful"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				8
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "f8ebb9af-d01d-4e6a-be6c-b95346157466",
+			"name": "GetUser",
+			"url": "http://localhost:8000/Users/GetUser",
+			"time": 31,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				31
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "a2087fa6-763e-49c6-aaa1-ef5b91c76ab0",
+			"name": "UpdateUsername",
+			"url": "http://localhost:8000/Users/UpdateUser",
+			"time": 48,
+			"responseCode": {
+				"code": 200,
+				"name": "User sucessfully updated."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				48
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "3a8d13d5-81f1-4c55-a90e-dbd1cca181a5",
+			"name": "GetUserAfterUpdate",
+			"url": "http://localhost:8000/Users/GetUser",
+			"time": 5,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				5
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "47093171-f43b-42ed-ac89-b0531c81d5e0",
+			"name": "CreateNewPackage",
+			"url": "http://localhost:8000/Package/CreateNewPackage",
+			"time": 28,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				28
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "9066c0e4-8f52-467f-8bfa-3a270877373f",
+			"name": "BuyPackage",
+			"url": "http://localhost:8000/Package/BuyPackage",
+			"time": 36,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				36
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "9046abb8-95db-470c-a643-68bc5b7d0158",
+			"name": "GetUserCards",
+			"url": "http://localhost:8000/Cards/GetUserCards",
+			"time": 4,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				4
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0474ba3e-383c-4967-bbf0-6601585a2726",
+			"name": "ConfigureDeck",
+			"url": "http://localhost:8000/Deck/ConfigureUserDeck",
+			"time": 26,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				26
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "b6404d41-4c01-4c0c-93a1-b1369bdafce5",
+			"name": "GetDeck",
+			"url": "http://localhost:8000/Deck/GetUserDeck",
+			"time": 4,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				4
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0c4197bc-369a-40ec-b7ba-9c8c7ae6e8c8",
+			"name": "InsertOffer",
+			"url": "http://localhost:8000/Trade/InsertOffer",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				10
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0e89ae84-e0bb-4281-b264-a0c18c96bd50",
+			"name": "BuyTradeOffer",
+			"url": "http://localhost:8000/Trade/BuyTradeOffer",
+			"time": 32,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				32
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "a8202e5f-461f-47dd-8917-128e09917ef4",
+			"name": "Get User Stats",
+			"url": "http://localhost:8000/Stats/GetUserStats",
+			"time": 4,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				4
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "1bb70306-473f-4827-8774-81883d0aa208",
+			"name": "Show Scoreboard",
+			"url": "http://localhost:8000/Stats/ShowScoreboard",
+			"time": 5,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				5
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "116a219f-7f06-4950-b092-97ffc4440fb3",
+			"name": "BattleStart",
+			"url": "http://localhost:8000/Battle/Start",
+			"time": 13607,
+			"responseCode": {
+				"code": 200,
+				"name": "Successfully performed Action."
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				13607
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 13980,
+	"collection": {
+		"requests": [
+			{
+				"id": "32f75840-5b1e-468c-9e5a-f9a79dfd48a1",
+				"method": "POST"
+			},
+			{
+				"id": "cc97ab76-eb4b-4ac3-a25d-6723ab1048c3",
+				"method": "POST"
+			},
+			{
+				"id": "f8ebb9af-d01d-4e6a-be6c-b95346157466",
+				"method": "GET"
+			},
+			{
+				"id": "a2087fa6-763e-49c6-aaa1-ef5b91c76ab0",
+				"method": "PUT"
+			},
+			{
+				"id": "3a8d13d5-81f1-4c55-a90e-dbd1cca181a5",
+				"method": "GET"
+			},
+			{
+				"id": "47093171-f43b-42ed-ac89-b0531c81d5e0",
+				"method": "POST"
+			},
+			{
+				"id": "9066c0e4-8f52-467f-8bfa-3a270877373f",
+				"method": "POST"
+			},
+			{
+				"id": "9046abb8-95db-470c-a643-68bc5b7d0158",
+				"method": "GET"
+			},
+			{
+				"id": "0474ba3e-383c-4967-bbf0-6601585a2726",
+				"method": "POST"
+			},
+			{
+				"id": "b6404d41-4c01-4c0c-93a1-b1369bdafce5",
+				"method": "GET"
+			},
+			{
+				"id": "0c4197bc-369a-40ec-b7ba-9c8c7ae6e8c8",
+				"method": "POST"
+			},
+			{
+				"id": "0e89ae84-e0bb-4281-b264-a0c18c96bd50",
+				"method": "POST"
+			},
+			{
+				"id": "a8202e5f-461f-47dd-8917-128e09917ef4",
+				"method": "GET"
+			},
+			{
+				"id": "1bb70306-473f-4827-8774-81883d0aa208",
+				"method": "GET"
+			},
+			{
+				"id": "116a219f-7f06-4950-b092-97ffc4440fb3",
+				"method": "POST"
+			},
+			{
+				"id": "2f0cea21-d662-4661-b4ba-f77e4ed38456",
+				"method": "POST"
+			}
+		]
+	}
+}
