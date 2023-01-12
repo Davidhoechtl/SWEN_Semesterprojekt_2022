@@ -22,12 +22,14 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             ITradeOfferRepository tradeOfferRepository,
             IQueryDatabase queryDatabase,
             CardFactory cardFactory,
+            UnitOfWorkFactory unitOfWorkFactory,
             TradeLauncher tradeLauncher)
         {
             this.userRepository = userRepository;
             this.tradeOfferRepository = tradeOfferRepository;
             this.queryDatabase = queryDatabase;
             this.cardFactory = cardFactory;
+            this.unitOfWorkFactory = unitOfWorkFactory;
             this.tradeLauncher = tradeLauncher;
         }
 
@@ -74,23 +76,36 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
                 return HttpResponse.GetUnauthorizedResponse();
             }
 
-            User user = userRepository.GetUserById(context.UserId.Value, queryDatabase);
-            Card providedCard = user.Cards.FirstOrDefault(card => card.Id == buyContext.CardId);
+            User buyer = userRepository.GetUserById(context.UserId.Value, queryDatabase);
+            Card providedCard = buyer.Cards.FirstOrDefault(card => card.Id == buyContext.CardId);
             if (providedCard == null)
             {
                 // User does not have the card he wants to offer
                 return new HttpResponse(403, "The user does not have the card he wants to provide.");
             }
 
-            bool success = tradeLauncher.TryBuyTradeOffer(user, providedCard, buyContext.TradeId);
+            TradingOffer offer = tradeOfferRepository.GetTradingOfferById(buyContext.TradeId, queryDatabase);
+            User seller = userRepository.GetUserById(offer.SellerId, queryDatabase);
+
+            bool success = tradeLauncher.TryBuyTradeOffer(offer, seller, buyer, providedCard);
             if (success)
             {
-                return HttpResponse.GetSuccessResponse();
+                // trade completed, update database...
+                using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateAndBeginTransaction())
+                {
+                    success = userRepository.UpdateUser(seller, unitOfWork) && success;
+                    success = userRepository.UpdateUser(buyer, unitOfWork) && success;
+                    success = tradeOfferRepository.UpdateTradeOffer(offer, unitOfWork) && success;
+
+                    if (success)
+                    {
+                        unitOfWork.Commit();
+                        return HttpResponse.GetSuccessResponse();
+                    }
+                }
             }
-            else
-            {
-                return HttpResponse.GetInternalServerErrorResponse();
-            }
+
+            return HttpResponse.GetInternalServerErrorResponse();
         }
 
         private List<TradeRequirement> GetTradeRequirementsFromContext(InsertTradeOfferContext context)
@@ -137,6 +152,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         private readonly ITradeOfferRepository tradeOfferRepository;
         private readonly IQueryDatabase queryDatabase;
         private readonly CardFactory cardFactory;
+        private readonly UnitOfWorkFactory unitOfWorkFactory;
         private readonly TradeLauncher tradeLauncher;
     }
 }

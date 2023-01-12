@@ -7,13 +7,6 @@ namespace MTCG.Tests
 
     internal class UserTests
     {
-        [SetUp]
-        public void Setup()
-        {
-            NpgsqlConnection mockConnection = new NpgsqlConnection();
-            mockDatabase = new NpgSqlQueryDatabase(mockConnection);
-        }
-
         [Test]
         public void Test_GetUserByUsername()
         {
@@ -22,13 +15,11 @@ namespace MTCG.Tests
             string username = "TestUser";
 
             //Act
-            User found = mockRepo.GetUserByUsername(username, mockDatabase);
+            User found = mockRepo.GetUserByUsername(username, null);
 
             //Assert
             Assert.NotNull(found);
             Assert.That(found.Credentials.UserName.Equals(username,StringComparison.Ordinal));
         }
-
-        private IQueryDatabase mockDatabase;
     }
 }

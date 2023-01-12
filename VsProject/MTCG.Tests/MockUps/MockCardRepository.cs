@@ -4,7 +4,7 @@ using Npgsql;
 
 namespace MTCG.Logic.Infrastructure.Repositories.MockUps
 {
-    public class MockCardRepository : ICardRepository
+    internal class MockCardRepository : ICardRepository
     {
         private static readonly IEnumerable<Card> availableCards = new List<Card>()
         {

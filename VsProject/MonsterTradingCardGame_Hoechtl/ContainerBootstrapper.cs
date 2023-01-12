@@ -1,21 +1,13 @@
-﻿using Autofac;
-using MonsterTradingCardGame_Hoechtl.Handler;
-using MonsterTradingCardGame_Hoechtl.Infrastructure;
-using MTCG.DAL;
-using MTCG.Infrastructure;
-using MTCG.Logic.Infrastructure;
-using MTCG.Logic.Infrastructure.Repositories;
-using MTCG.Logic.Infrastructure.Repositories.MockUps;
-using MTCG.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MonsterTradingCardGame_Hoechtl
 {
+    using Autofac;
+    using MonsterTradingCardGame_Hoechtl.Handler;
+    using MonsterTradingCardGame_Hoechtl.Infrastructure;
+    using MTCG.DAL;
+    using MTCG.Infrastructure;
+    using MTCG.Logic.Infrastructure;
+    using MTCG.Logic.Infrastructure.Repositories;
     internal class ContainerBootstrapper
     {
         private readonly ContainerBuilder builder;

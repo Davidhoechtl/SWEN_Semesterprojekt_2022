@@ -1,9 +1,8 @@
 ﻿using MTCG.DAL;
-using MTCG.Models;
 
 namespace MTCG.Logic.Infrastructure.Repositories.MockUps
 {
-    public class MockUserRepository : IUserRepository
+    internal class MockUserRepository : IUserRepository
     {
         private static readonly IEnumerable<User> registeredUsers = new List<User>()
         {

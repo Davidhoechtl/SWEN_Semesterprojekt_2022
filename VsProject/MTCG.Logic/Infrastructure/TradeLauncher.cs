@@ -12,31 +12,32 @@ namespace MTCG.Logic.Infrastructure
 {
     public class TradeLauncher
     {
-        public TradeLauncher(IUserRepository userRepository, ITradeOfferRepository tradeOfferRepository, IQueryDatabase queryDatabase, UnitOfWorkFactory unitOfWorkFactory)
+        public TradeLauncher(ITradeOfferRepository tradeOfferRepository, IQueryDatabase queryDatabase)
         {
-            this.userRepository = userRepository;
             this.tradeOfferRepository = tradeOfferRepository;
             this.queryDatabase = queryDatabase;
-            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public bool SaveTradeOffer(User user, Card card, params TradeRequirement[] requirements)
         {
             TradingOffer offer = new TradingOffer(
-                user.Id, 
-                card, 
-                requirements.ToList(), 
+                user.Id,
+                card,
+                requirements.ToList(),
                 true
             );
 
             return tradeOfferRepository.InsertTradeOffer(offer, queryDatabase);
         }
 
-        public bool TryBuyTradeOffer(User buyer, Card providedCard, int tradeOfferId)
+        public bool TryBuyTradeOffer(TradingOffer offer, User seller, User buyer, Card providedCard)
         {
-            TradingOffer offer = tradeOfferRepository.GetTradingOfferById(tradeOfferId, queryDatabase);
+            if(offer == null || !offer.Active)
+            {
+                return false;
+            }
 
-            foreach(TradeRequirement requirement in offer.TradeRequirements)
+            foreach (TradeRequirement requirement in offer.TradeRequirements)
             {
                 if (!requirement.MeetsRequirement(providedCard))
                 {
@@ -45,8 +46,6 @@ namespace MTCG.Logic.Infrastructure
             }
 
             // provided card matches all trade requirements proceed with trading cards
-            User seller = userRepository.GetUserById(offer.SellerId, queryDatabase);
-
             // give buyer card
             seller.Cards.Remove(offer.Card);
             buyer.Cards.Add(offer.Card);
@@ -58,27 +57,10 @@ namespace MTCG.Logic.Infrastructure
             offer.BuyerId = buyer.Id;
             offer.Active = false;
 
-            // trade completed, update database...
-            using(IUnitOfWork unitOfWork = unitOfWorkFactory.CreateAndBeginTransaction())
-            {
-                bool success = true;
-                success = userRepository.UpdateUser(seller, unitOfWork) && success;
-                success = userRepository.UpdateUser(buyer, unitOfWork) && success;
-                success = tradeOfferRepository.UpdateTradeOffer(offer, unitOfWork) && success;
-
-                if (success)
-                {
-                    unitOfWork.Commit();
-                    return true;
-                }
-            }
-
-            return false;
+            return true;
         }
 
-        private readonly IUserRepository userRepository;
         private readonly ITradeOfferRepository tradeOfferRepository;
         private readonly IQueryDatabase queryDatabase;
-        private readonly UnitOfWorkFactory unitOfWorkFactory;
     }
 }

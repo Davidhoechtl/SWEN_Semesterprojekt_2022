@@ -8,13 +8,10 @@ namespace MTCG.Tests
     internal class BattleValidationTests
     {
         private Random rnd;
-        private IQueryDatabase mockDatabase;
 
         [SetUp]
         public void Setup()
         {
-            NpgsqlConnection mockConnection = new NpgsqlConnection();
-            mockDatabase = new NpgSqlQueryDatabase(mockConnection);
             rnd = new Random();
         }
 
@@ -23,7 +20,7 @@ namespace MTCG.Tests
         {
             BattleLauncher battleLauncher = new BattleLauncher(rnd);
             ICardRepository cardRepository = new MockCardRepository();
-            IEnumerable<Card> cards = cardRepository.GetAllAvailableCards(mockDatabase);
+            IEnumerable<Card> cards = cardRepository.GetAllAvailableCards(null);
 
             User user1 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
             User user2 = new User { Deck = null };
@@ -38,7 +35,7 @@ namespace MTCG.Tests
         {
             BattleLauncher battleLauncher = new BattleLauncher(rnd);
             ICardRepository cardRepository = new MockCardRepository();
-            IEnumerable<Card> cards = cardRepository.GetAllAvailableCards(mockDatabase);
+            IEnumerable<Card> cards = cardRepository.GetAllAvailableCards(null);
 
             User user1 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
             User user2 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(5)) } };
@@ -53,7 +50,7 @@ namespace MTCG.Tests
         {
             BattleLauncher battleLauncher = new BattleLauncher(rnd);
             ICardRepository cardRepository = new MockCardRepository();
-            IEnumerable<Card> cards = cardRepository.GetAllAvailableCards(mockDatabase);
+            IEnumerable<Card> cards = cardRepository.GetAllAvailableCards(null);
 
             User user1 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
             User user2 = new User { Deck = new Deck() { Cards = new Stack<Card>() } };
@@ -68,14 +65,16 @@ namespace MTCG.Tests
         {
             BattleLauncher battleLauncher = new BattleLauncher(rnd);
             ICardRepository cardRepository = new MockCardRepository();
-            IEnumerable<Card> cards = cardRepository.GetAllAvailableCards(mockDatabase);
+            IEnumerable<Card> cards = cardRepository.GetAllAvailableCards(null);
 
             User user1 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
+            user1.Credentials = new UserCredentials() { UserName = "user1", Password= "password" };
             User user2 = new User { Deck = new Deck() { Cards = new Stack<Card>(cards.Take(3)) } };
+            user2.Credentials = new UserCredentials() { UserName = "user2", Password = "password" };
 
             (BattleResult result, string protocol) battleResult = battleLauncher.Launch(user1, user2);
 
-            Assert.That(battleResult.result == BattleResult.Invalid);
+            Assert.That(battleResult.result != BattleResult.Invalid);
         }
     }
 }

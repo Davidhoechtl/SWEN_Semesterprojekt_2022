@@ -6,35 +6,39 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
 {
     internal class MockTradeOfferRepository : ITradeOfferRepository
     {
-        private static readonly IEnumerable<TradingOffer> offers = new List<TradingOffer>()
+        public static readonly IEnumerable<TradingOffer> offers = new List<TradingOffer>()
         {
             new TradingOffer(
                 1,
-                new MonsterCard()
+                1,
+                null,
+                new Troll()
                 {
-                    Name = "Wolve",
-                    Damage = 10,
+                    Name = "SmallTroll",
+                    Damage = 30,
                     ElementTyp = ElementTyp.Normal
                 },
                 new List<TradeRequirement>()
                 {
-                    new DamageRequirement(15),
-                    new ElementTypRequirement(ElementTyp.Fire),
+                    new DamageRequirement(60),
+                    new ElementTypRequirement(ElementTyp.Water),
                     new CardTypRequirement<MonsterCard>()
                 },
                 true
             ),
             new TradingOffer(
+                2,
                 1,
-                new MonsterCard()
+                null,
+                new Troll()
                 {
-                    Name = "Blob",
-                    Damage = 10,
+                    Name = "SmallTroll",
+                    Damage = 30,
                     ElementTyp = ElementTyp.Normal
                 },
                 new List<TradeRequirement>()
                 {
-                    new DamageRequirement(15),
+                    new DamageRequirement(20),
                     new ElementTypRequirement(ElementTyp.Fire),
                     new CardTypRequirement<SpellCard>()
                 },
