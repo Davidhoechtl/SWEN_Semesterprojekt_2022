@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS public.users
     username text NOT NULL,
     password text NOT NULL,
     coins integer NOT NULL,
+    elo integer NOT NULL,
     PRIMARY KEY (user_id)
 );
 

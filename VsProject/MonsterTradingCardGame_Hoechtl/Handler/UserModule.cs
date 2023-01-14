@@ -11,6 +11,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
     internal class UserModule : IHandler
     {
         public const int StartCoins = 100;
+        public const int StartElo = 1000;
         public string ModuleName => "Users";
 
         public UserModule(
@@ -38,7 +39,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
             bool success;
             using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateAndBeginTransaction())
             {
-                success = userRepository.RegisterUser(userCredentials.UserName, userCredentials.Password, StartCoins, unitOfWork);
+                success = userRepository.RegisterUser(userCredentials.UserName, userCredentials.Password, StartCoins, StartElo, unitOfWork);
                 if (success)
                 {
                     unitOfWork.Commit();

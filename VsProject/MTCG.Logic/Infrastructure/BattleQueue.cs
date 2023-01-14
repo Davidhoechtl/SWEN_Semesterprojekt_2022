@@ -65,8 +65,11 @@ namespace MTCG.Logic.Infrastructure
                             user1.User.Cards.AddRange(user2Deck.Cards);
                             user1.User.Statistic.BattlesPlayed += 1;
                             user1.User.Statistic.Wins += 1;
-                            UpdateDatabase(user1.User, user2.User);
                             
+                            RecalculateElo(user1.User, user2.User);
+                            
+                            UpdateDatabase(user1.User, user2.User);
+
                             user1.BattleProtocol = new BattleProtocol(result.state, result.protocol);
                             user2.BattleProtocol = new BattleProtocol(BattleResult.Lose, result.protocol);
                         }
@@ -82,6 +85,8 @@ namespace MTCG.Logic.Infrastructure
                             user2.User.Cards.AddRange(user1Deck.Cards);
                             user2.User.Statistic.BattlesPlayed += 1;
                             user2.User.Statistic.Wins += 1;
+
+                            RecalculateElo(user2.User, user1.User);
 
                             UpdateDatabase(user1.User, user2.User);
 
@@ -99,6 +104,45 @@ namespace MTCG.Logic.Infrastructure
                 else
                 {
                     Thread.Sleep(1000);
+                }
+            }
+        }
+
+        private void RecalculateElo(User winner, User loser)
+        {
+            int eloDiff;
+            if(winner.ELO > loser.ELO)
+            {
+                // winner has loser.ELO
+                eloDiff = winner.ELO - loser.ELO;
+
+                if(eloDiff >= 200)
+                {
+                    // small win
+                    winner.ELO += 50;
+                    loser.ELO -= 50;
+                }
+                else
+                {
+                    // normal win
+                    winner.ELO += 100;
+                    loser.ELO -= 100;
+                }
+            }
+            else
+            {
+                eloDiff = loser.ELO - winner.ELO;
+                if (eloDiff >= 200)
+                {
+                    // big win
+                    winner.ELO += 150;
+                    loser.ELO -= 150;
+                }
+                else
+                {
+                    // normal win
+                    winner.ELO += 100;
+                    loser.ELO -= 100;
                 }
             }
         }

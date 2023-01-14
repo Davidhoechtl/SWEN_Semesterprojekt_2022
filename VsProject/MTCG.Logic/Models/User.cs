@@ -13,7 +13,7 @@ namespace MTCG.Models
         public List<Card> Cards { get; set; } = new();
         public Deck Deck { get; set; }
         public int Coins { get; set; }
-
+        public int ELO { get; set; }
         public UserStatistic Statistic { get; set; }
 
         public Deck SelectDeck()

@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS public.users
     username text NOT NULL,
     password text NOT NULL,
     coins integer NOT NULL,
+    elo integer NOT NULL,
     PRIMARY KEY (user_id)
 );
 
@@ -225,7 +226,6 @@ ALTER TABLE IF EXISTS public.trade_offers
 
 END;
 
-
 BEGIN;
 INSERT INTO card_category (category_id) VALUES ('Goblin');
 INSERT INTO card_category (category_id) VALUES ('Dragon');
@@ -279,16 +279,16 @@ INSERT INTO cards (name, category_id, damage, card_type, element_type) VALUES ('
 INSERT INTO cards (name, category_id, damage, card_type, element_type) VALUES ('SmallFireSpell', 'FireSpell', 30, 'S', 'F');
 INSERT INTO cards (name, category_id, damage, card_type, element_type) VALUES ('BigFireSpell', 'FireSpell', 50, 'S', 'F');
 
-INSERT INTO users (username, password, coins) VALUES ('admin', 'admin', 10000);
+INSERT INTO users (username, password, coins, elo) VALUES ('admin', 'admin', 10000, 1000);
 INSERT INTO users_stats (user_Id, username, coins_spent, battles_played, wins, win_rate) VALUES (1, 'admin', 0, 0, 0, 0);
 INSERT INTO decks (user_Id) VALUES (1);
 INSERT INTO users_cards(card_id, user_id, count) VALUES (1, 1, 1);
 INSERT INTO decks_cards (deck_id, card_id) VALUES (1, 1);
 INSERT INTO decks_cards (deck_id, card_id) VALUES (1, 3);
 INSERT INTO decks_cards (deck_id, card_id) VALUES (1, 5);
-INSERT INTO decks_cards (deck_id, card_id) VALUES (1, 10);
+INSERT INTO decks_cards (deck_id, card_id) VALUES (1, 13);
 
-INSERT INTO users (username, password, coins) VALUES ('John', 'Wick', 500);
+INSERT INTO users (username, password, coins, elo) VALUES ('John', 'Wick', 500, 1000);
 INSERT INTO users_stats (user_Id, username, coins_spent, battles_played, wins, win_rate) VALUES (2, 'Test', 0, 0, 0, 0);
 INSERT INTO decks (user_Id) VALUES (2);
 INSERT INTO users_cards(card_id, user_id, count) VALUES (1, 2, 1);

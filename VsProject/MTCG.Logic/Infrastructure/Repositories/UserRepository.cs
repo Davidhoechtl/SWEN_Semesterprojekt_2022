@@ -4,14 +4,34 @@ namespace MTCG.Logic.Infrastructure.Repositories
     using MTCG.DAL;
     using MTCG.Models;
     using Npgsql;
+    using System.Collections.Generic;
 
     public class UserRepository : IUserRepository
     {
-        public UserRepository( ICardRepository cardRepository, IDeckRepository deckRepository, IUserStatisticRepository statisticRepository)
+        public UserRepository(ICardRepository cardRepository, IDeckRepository deckRepository, IUserStatisticRepository statisticRepository)
         {
             this.cardRepository = cardRepository;
             this.deckRepository = deckRepository;
             this.statisticRepository = statisticRepository;
+        }
+
+        public List<User> GetAllUsersCore(IQueryDatabase queryDatabase)
+        {
+            string sqlStatement = @"SELECT users.* FROM users";
+
+            return queryDatabase.GetItems(
+                sqlStatement,
+                reader =>
+                {
+                    List<User> users = new();
+                    while (reader.Read())
+                    {
+                        users.Add(ConvertUserFromReader(reader));
+                    }
+                    reader.Close();
+                    return users;
+                }
+            );
         }
 
         public User GetUserByUsername(string username, IQueryDatabase database)
@@ -23,11 +43,16 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             User user = database.GetItem<User>(
                 sqlStatement,
-                ConvertUserFromReader,
+                reader =>
+                {
+                    User user = ConvertUserFromReader(reader);
+                    reader.Close();
+                    return user;
+                },
                 new NpgsqlParameter("username", username)
             );
 
-            if(user != null)
+            if (user != null)
             {
                 user.Cards = cardRepository.GetUserCards(user.Id, database).ToList();
                 user.Deck = deckRepository.GetUsersDeck(user.Id, database);
@@ -42,7 +67,12 @@ namespace MTCG.Logic.Infrastructure.Repositories
             string sqlStatement = "SELECT * FROM Users WHERE user_id = @user_Id";
             User user = database.GetItem<User>(
                 sqlStatement,
-                ConvertUserFromReader,
+                reader =>
+                {
+                    User user = ConvertUserFromReader(reader);
+                    reader.Close();
+                    return user;
+                },
                 new NpgsqlParameter("user_Id", userId)
             );
 
@@ -56,15 +86,16 @@ namespace MTCG.Logic.Infrastructure.Repositories
             return user;
         }
 
-        public bool RegisterUser(string username, string password, int coins, IUnitOfWork database)
+        public bool RegisterUser(string username, string password, int coins, int elo, IUnitOfWork database)
         {
-            string sqlStatement = "INSERT INTO Users (username, password, coins) VALUES (@username, @password, @coins) RETURNING user_id";
+            string sqlStatement = "INSERT INTO Users (username, password, coins, elo) VALUES (@username, @password, @coins, @elo) RETURNING user_id";
 
             int? user_id = database.InsertAndGetLastIdentity(
                 sqlStatement,
                 new NpgsqlParameter("username", username),
                 new NpgsqlParameter("password", password),
-                new NpgsqlParameter("coins", coins)
+                new NpgsqlParameter("coins", coins),
+                new NpgsqlParameter("elo", elo)
             );
 
             if (user_id.HasValue)
@@ -90,13 +121,14 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
         public bool UpdateUser(User user, IUnitOfWork database)
         {
-            string sqlStatement = "UPDATE Users SET username = @username, password = @password, coins = @coins WHERE user_Id = @user_Id";
+            string sqlStatement = "UPDATE Users SET username = @username, password = @password, coins = @coins, elo = @elo WHERE user_Id = @user_Id";
             int affectedRows = database.ExecuteNonQuery(
                 sqlStatement,
                 new NpgsqlParameter("user_Id", user.Id),
                 new NpgsqlParameter("username", user.Credentials.UserName),
                 new NpgsqlParameter("password", user.Credentials.Password),
-                new NpgsqlParameter("coins", user.Coins)
+                new NpgsqlParameter("coins", user.Coins),
+                new NpgsqlParameter("elo", user.ELO)
             );
 
             UpdatedUserCards(user, database);
@@ -158,11 +190,11 @@ namespace MTCG.Logic.Infrastructure.Repositories
                         UserName = reader.GetString(1),
                         Password = reader.GetString(2)
                     },
-                    Coins = reader.GetInt32(3)
+                    Coins = reader.GetInt32(3),
+                    ELO = reader.GetInt32(reader.GetOrdinal("elo"))
                 };
             }
 
-            reader.Close();
             return user;
         }
 
@@ -176,7 +208,7 @@ namespace MTCG.Logic.Infrastructure.Repositories
 
             string insertStatement = "INSERT INTO users_cards (user_id, card_id, count) VALUES (@userId, @cardId, @count)";
             IEnumerable<IGrouping<int, Card>> cards = user.Cards.GroupBy(x => x.Id);
-            foreach(IGrouping<int, Card> pair in cards)
+            foreach (IGrouping<int, Card> pair in cards)
             {
                 int insertDeltaRow = database.ExecuteNonQuery(
                     insertStatement,

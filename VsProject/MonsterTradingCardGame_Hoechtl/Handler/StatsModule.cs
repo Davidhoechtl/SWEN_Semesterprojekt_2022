@@ -12,9 +12,10 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
     {
         public string ModuleName => "Stats";
 
-        public StatsModule( IUserStatisticRepository userStatisticRepository, IQueryDatabase queryDatabase)
+        public StatsModule( IUserStatisticRepository userStatisticRepository, IUserRepository userRepository, IQueryDatabase queryDatabase)
         {
             this.userStatisticRepository = userStatisticRepository;
+            this.userRepository = userRepository;
             this.queryDatabase = queryDatabase;
         }
 
@@ -42,9 +43,9 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         [Get]
         public HttpResponse ShowScoreboard(SessionContext context)
         {
-            List<ScoreboardRow> scoreboard = userStatisticRepository.GetAllUserStats(queryDatabase)
-                .Select(stat => new ScoreboardRow(stat.Username, stat.Wins))
-                .OrderByDescending(scoreRow => scoreRow.Wins)
+            List<ScoreboardRow> scoreboard = userRepository.GetAllUsersCore(queryDatabase)
+                .Select(user => new ScoreboardRow(user.Credentials.UserName, user.ELO))
+                .OrderByDescending(scoreRow => scoreRow.Elo)
                 .ToList();
 
             HttpResponse httpResponse= HttpResponse.GetSuccessResponse();
@@ -53,6 +54,7 @@ namespace MonsterTradingCardGame_Hoechtl.Handler
         }
 
         private readonly IUserStatisticRepository userStatisticRepository;
+        private readonly IUserRepository userRepository;
         private readonly IQueryDatabase queryDatabase;
     }
 }
