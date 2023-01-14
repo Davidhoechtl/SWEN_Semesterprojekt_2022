@@ -50,5 +50,15 @@ namespace MTCG.Logic.Infrastructure.Repositories.MockUps
         {
             return true;
         }
+
+        public List<User> GetAllUsersCore(IQueryDatabase queryDatabase)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RegisterUser(string username, string password, int coins, int elo, IUnitOfWork database)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
